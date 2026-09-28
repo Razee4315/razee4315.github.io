@@ -19,6 +19,8 @@
   var tree = window.Birds ? Birds.tree(sceneSvg) : null;
   var flock = window.Birds ? Birds.flock({
     sky: $('[data-sky]'), tree: tree,
+    // Tell the meadow when a bird lands in the tree so the animals can look up.
+    onLand: function (spot) { if (spot && spot.kind === 'tree') document.dispatchEvent(new CustomEvent('flock:tree-landing')); },
     onChange: function (n, max) {
       var roostInvite = $('[data-roost-invite]');
       if (roostInvite && n >= max) { roostInvite.disabled = true; roostInvite.textContent = 'The flock is complete'; }
@@ -52,63 +54,7 @@
     });
   }
 
-  /* ================= meadow residents ================= */
-  var rabbit = $('[data-rabbit]'), chicks = $('[data-chicks]');
-  var rabbitMotion = null, greetings = [], greetingTimer;
-  rabbit.addEventListener('click', function () {
-    if (reduce) { rabbit.setAttribute('aria-label', 'The rabbit says hello'); return; }
-    if (rabbitMotion) rabbitMotion.cancel();
-    rabbitMotion = $('.rabbit-hop', rabbit).animate([
-      { transform: 'translate(0,0)' }, { transform: 'translate(8px,-14px)', offset: .16 },
-      { transform: 'translate(22px,0)', offset: .3 }, { transform: 'translate(30px,-10px)', offset: .46 },
-      { transform: 'translate(40px,0)', offset: .6 }, { transform: 'translate(22px,-12px)', offset: .8 },
-      { transform: 'translate(0,0)' }
-    ], { duration: 1900, easing: 'ease-in-out' });
-  });
-  // Short, alternating play routines: explore, chase, peck, then an occasional greeting.
-  var playStep = 0, playTimer, rabbitTimer, residentsVisible = false;
-  function playChicks(clicked) {
-    if (reduce) {
-      if (clicked) { clearTimeout(greetingTimer); chicks.classList.add('is-greeting'); greetingTimer = setTimeout(function () { chicks.classList.remove('is-greeting'); }, 1400); }
-      return;
-    }
-    greetings.forEach(function (animation) { animation.cancel(); }); greetings = [];
-    var mode = playStep++ % 4;
-    chicks.dataset.activity = ['exploring', 'chasing', 'pecking', 'greeting'][mode];
-    var paths = [
-      [[0, -16, -8, 18, 0], [0, 14, 4, -18, 0]],
-      [[0, 42, 60, 20, 0], [0, 18, -12, -36, 0]],
-      [[0, 12, 12, -6, 0], [0, -12, -12, 8, 0]],
-      [[0, 24, 42, 42, 0], [0, -24, -42, -42, 0]]
-    ][mode];
-    ['.chick-black', '.chick-yellow'].forEach(function (selector, i) {
-      var node = $(selector, chicks);
-      var frames = paths[i].map(function (x, k) { return { transform: 'translate(' + x + 'px,' + (k % 2 && mode !== 3 ? -7 : 0) + 'px)' + (mode === 2 && (k === 1 || k === 2) ? ' rotate(' + (i ? -16 : 16) + 'deg)' : '') }; });
-      greetings.push(node.animate(frames, { duration: mode === 1 ? 2600 : 3600, easing: 'ease-in-out' }));
-    });
-    if (mode === 3) greetings.push($('.chick-hearts', chicks).animate([
-      { opacity: 0, transform: 'translateY(0)' }, { opacity: 0, offset: .4 },
-      { opacity: 1, offset: .55 }, { opacity: 0, transform: 'translateY(-14px)' }
-    ], { duration: 3600 }));
-  }
-  function schedulePlay() {
-    clearTimeout(playTimer);
-    if (!residentsVisible || document.hidden || reduce) return;
-    playChicks(false); playTimer = setTimeout(schedulePlay, 4200);
-  }
-  function scheduleRabbit() {
-    clearTimeout(rabbitTimer);
-    if (!residentsVisible || document.hidden || reduce) return;
-    rabbit.click(); rabbitTimer = setTimeout(scheduleRabbit, 5800 + Math.random() * 2300);
-  }
-  function resumeResidents() {
-    clearTimeout(playTimer); clearTimeout(rabbitTimer);
-    if (residentsVisible && !document.hidden) { schedulePlay(); scheduleRabbit(); }
-    else { greetings.forEach(function (animation) { animation.cancel(); }); if (rabbitMotion) rabbitMotion.cancel(); }
-  }
-  chicks.addEventListener('click', function () { clearTimeout(playTimer); playChicks(true); if (residentsVisible && !reduce) playTimer = setTimeout(schedulePlay, 4200); });
-  new IntersectionObserver(function (entries) { residentsVisible = entries[0].isIntersecting; resumeResidents(); }).observe(rabbit);
-  document.addEventListener('visibilitychange', resumeResidents);
+  /* Meadow residents live in assets/meadow.js. */
 
   /* ================= nav: hide going down, show going up; mark the project on screen ================= */
   var nav = $('[data-nav]'), lastY = window.scrollY;

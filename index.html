@@ -13,7 +13,7 @@
 <meta property="og:title" content="Five free tools. One small tree.">
 <meta property="og:description" content="Snipflag, Paperling, Paperwren, Vuoom and coldframe: free, open-source tools by Saqlain Abbas.">
 <meta property="og:url" content="https://razee4315.github.io/">
-<meta property="og:image" content="https://razee4315.github.io/og.png?v=28">
+<meta property="og:image" content="https://razee4315.github.io/og.png?v=40">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
@@ -22,7 +22,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=JetBrains+Mono:wght@500&display=swap">
-<link rel="stylesheet" href="assets/site.css?v=28">
+<link rel="stylesheet" href="assets/site.css?v=40">
 <script>
   (function () {
     var r = document.documentElement;
@@ -90,18 +90,87 @@
           <title id="scene-title">A small tree with a hanging birdhouse. Birds you invite fly around the page.</title>
           <g data-world></g>
         </svg>
-        <button class="grass-animal rabbit" type="button" data-rabbit data-no-bird aria-label="Say hello to the rabbit and watch it hop">
-          <svg viewBox="0 0 180 110" aria-hidden="true"><g class="rabbit-hop"><g class="rabbit-body">
-            <circle cx="43" cy="79" r="10" fill="#E8E0D1"/><ellipse cx="75" cy="81" rx="31" ry="22" fill="#B3A18A"/>
-            <path d="M60 91Q67 66 82 78Q96 96 81 101H58" fill="#97836C"/><ellipse cx="75" cy="100" rx="17" ry="4" fill="#C7B7A0"/>
-            <path d="M97 77Q111 80 108 99H98L92 84" fill="#C7B7A0"/>
-            <g class="rabbit-ears"><path d="M101 56Q80 13 90 11Q104 12 111 55" fill="#B3A18A"/><path d="M108 55Q110 9 120 13Q128 23 117 58" fill="#C7B7A0"/><path d="M100 43Q90 19 93 19L106 47M114 46Q114 20 119 21L117 48" stroke="#CA9D95" stroke-width="4" fill="none" stroke-linecap="round"/></g>
-            <path d="M93 57Q113 44 124 61L133 72Q134 84 116 84Q93 85 91 72Z" fill="#C7B7A0"/>
-            <ellipse cx="120" cy="76" rx="12" ry="7" fill="#E8E0D1"/><circle cx="116" cy="63" r="3.1" fill="#30291F"/><circle cx="117" cy="62" r=".9" fill="#FFF"/>
-            <path d="M129 72l5 2-4 3Z" fill="#A9766C"/><path d="M127 78l-2 2m-1-5 12-2m-12 6 12 3" stroke="#796857" stroke-width=".8" fill="none"/>
-          </g></g></svg>
+        <button class="critter rabbit" type="button" data-rabbit data-no-bird aria-label="A rabbit in the grass. Click to startle it into a hop">
+          <svg viewBox="0 0 200 140" aria-hidden="true">
+            <ellipse class="r-shadow" cx="95" cy="132" rx="38" ry="3.6" fill="#141414" opacity=".12"/>
+            <g class="r-root">
+              <g class="r-tail"><circle cx="50" cy="104" r="10.5" fill="#F4EEE3"/><path d="M42 108a10 10 0 0 0 16 2" fill="none" stroke="#DCD2C0" stroke-width="2" stroke-linecap="round"/></g>
+              <g class="r-hind">
+                <path d="M57 114C50 94 65 81 83 86C98 91 99 113 88 124C76 132 61 128 57 114Z" fill="#A6937A"/>
+                <path d="M57 127C65 121.5 91 121.5 100 127.5C98 132 67 133 57 131Z" fill="#8F7D66"/>
+                <path d="M66 96C72 91 82 91 87 97" fill="none" stroke="#BDAB93" stroke-width="2.4" stroke-linecap="round" opacity=".7"/>
+              </g>
+              <path d="M52 106C47 84 65 66 95 67C121 68 136 84 132 104C128 121 106 129 80 128C64 127 55 119 52 106Z" fill="#B5A38B"/>
+              <path d="M70 72C84 66 104 66 118 72" fill="none" stroke="#C9B89F" stroke-width="3" stroke-linecap="round" opacity=".8"/>
+              <path d="M93 119C109 121 123 113 129 101C128 115 113 127 95 128Z" fill="#E7DECF"/>
+              <g class="r-front">
+                <path d="M113 100C117 109 117 120 113 130H125C128 120 126 107 123 98Z" fill="#A6937A"/>
+                <path d="M111.5 129.5C115 127 123 127 126.5 130.5C123 132.5 114 132.5 111.5 129.5Z" fill="#8F7D66"/>
+              </g>
+              <g class="r-head">
+                <g class="r-ear-back"><path d="M121 62C111 38 111 17 119 12C127 9 130 34 128 60Z" fill="#9D8A72"/></g>
+                <path d="M108 80C106 61 122 51 139 55C155 59 161 73 157 83C153 93 137 97 125 93C115 90 108 88 108 80Z" fill="#BCA991"/>
+                <g class="r-ear-front"><path d="M128 60C126 33 132 12 141 13C150 16 145 39 137 62Z" fill="#BCA991"/><path d="M133.5 55C132.5 37 136.5 22 140.5 22C144 26 140 41 136.5 56Z" fill="#DBA99E"/></g>
+                <ellipse cx="146" cy="85" rx="10" ry="7" fill="#E7DECF"/>
+                <g class="r-eye"><circle cx="141" cy="70" r="4.2" fill="#2A231B"/><circle cx="142.6" cy="68.5" r="1.3" fill="#FFF"/></g>
+                <path d="M136 66Q141 63.5 146 66" fill="none" stroke="#8F7D66" stroke-width="1.2" stroke-linecap="round" opacity=".6"/>
+                <g class="r-nose"><path d="M155 76C157.5 74.5 160 76.5 158.8 79C157 80.5 154.3 79.2 155 76Z" fill="#B97E74"/></g>
+                <path d="M157 80.5Q156 84.5 151.5 85.5" fill="none" stroke="#7A6653" stroke-width="1" stroke-linecap="round"/>
+                <path d="M151 82L167 78.5M151 84L168 86M150 83.5L163 90.5" fill="none" stroke="#8C7A66" stroke-width=".7" stroke-linecap="round" opacity=".7"/>
+              </g>
+            </g>
+          </svg>
         </button>
-        <button class="grass-animal chicks" type="button" data-chicks data-no-bird aria-label="Bring the black and yellow chicks together to share hearts"><svg viewBox="0 0 220 100" aria-hidden="true"><g class="chick-walk chick-black"><g transform="translate(40 68)"><path d="M-9 18l-2 8m20-8 2 8m-12 0h-5m17 0h5" fill="none" stroke="#BA8040" stroke-width="2" stroke-linecap="round"/><path d="M-15 3Q-23 3-24-2l10 2" fill="var(--chick-wing)"/><ellipse cy="7" rx="19" ry="17" fill="var(--chick-body)"/><circle cx="10" cy="-8" r="14" fill="var(--chick-body)"/><path d="M-12 3Q2-5 6 8Q-4 18-12 3" fill="var(--chick-wing)"/><path d="M22-8l8 4-8 3Z" fill="#D88C41"/><circle cx="15" cy="-11" r="2.2" fill="var(--chick-eye)"/><circle cx="15.6" cy="-11.7" r=".7" fill="#FFF"/><path d="M3-21l3-5 2 5 4-3 1 4" stroke="var(--chick-wing)" stroke-width="2" fill="none" stroke-linecap="round"/></g></g><g class="chick-walk chick-yellow"><g transform="translate(180 68) scale(-1 1)"><path d="M-9 18l-2 8m20-8 2 8m-12 0h-5m17 0h5" fill="none" stroke="#BA8040" stroke-width="2" stroke-linecap="round"/><path d="M-15 3Q-23 3-24-2l10 2" fill="var(--chick-wing)"/><ellipse cy="7" rx="19" ry="17" fill="var(--chick-body)"/><circle cx="10" cy="-8" r="14" fill="var(--chick-body)"/><path d="M-12 3Q2-5 6 8Q-4 18-12 3" fill="var(--chick-wing)"/><path d="M22-8l8 4-8 3Z" fill="#D88C41"/><circle cx="15" cy="-11" r="2.2" fill="var(--chick-eye)"/><circle cx="15.6" cy="-11.7" r=".7" fill="#FFF"/><path d="M3-21l3-5 2 5 4-3 1 4" stroke="var(--chick-wing)" stroke-width="2" fill="none" stroke-linecap="round"/></g></g><g class="chick-hearts" fill="#BB6A60"><path d="M100 35C83 25 91 16 100 23C109 16 117 25 100 35Z"/><path d="M123 22C111 15 117 8 123 13C129 8 135 15 123 22Z"/></g></svg></button>
+        <div class="chick-yard" data-chicks>
+          <button class="critter chick chick-black" type="button" data-chick="black" data-no-bird aria-label="Black chick. Click to say hello">
+            <svg viewBox="0 0 80 80" aria-hidden="true">
+              <ellipse cx="40" cy="76.5" rx="15" ry="2" fill="#141414" opacity=".12"/>
+              <g class="c-flip">
+                <g class="c-leg-a"><path d="M35 58L34 72M34 72l-4.5 2.6M34 72l.8 4M34 72l4 2.4" fill="none" stroke="var(--leg)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></g>
+                <g class="c-leg-b"><path d="M43 58L43 72M43 72l-4.2 2.8M43 72l1 4M43 72l4.4 2" fill="none" stroke="var(--leg-far)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></g>
+                <g class="c-body">
+                  <path d="M17 45C11 41 11 34.5 15 31.5C16 37 20 40 23 41.5Z" fill="var(--wing)"/>
+                  <path d="M16 47C16 34 27 28 39 28C52 28 62 36 61 49C60 60 51 65 38 65C25 65 16 58 16 47Z" fill="var(--body)"/>
+                  <path d="M30 63C40 66 53 62 58 53C57 61 49 66 38 66C34 66 32 65 30 63Z" fill="var(--belly)"/>
+                  <g class="c-wing"><path d="M24 45C28 36 42 37 46 45C44 51 40 55 33 55C27 55 23 51 24 45Z" fill="var(--wing)"/><path d="M28 51.5C31 53 36 53 39 51.5M27 48C31 49.5 37 49.5 41 47.5" fill="none" stroke="var(--body)" stroke-width="1.1" stroke-linecap="round" opacity=".55"/></g>
+                  <g class="c-head">
+                    <circle cx="52" cy="30" r="14" fill="var(--body)"/>
+                    <path d="M47 17C45.5 12.5 48.5 10 51 12.2C51.8 8.8 55.8 9 56 12.6" fill="none" stroke="var(--wing)" stroke-width="2" stroke-linecap="round"/>
+                    <ellipse cx="58.5" cy="35" rx="3.4" ry="2.1" fill="var(--cheek)" opacity=".75"/>
+                    <g class="c-eye"><circle cx="57" cy="27" r="2.5" fill="var(--eye)"/><circle cx="57.8" cy="26.2" r=".8" fill="#FFF"/></g>
+                    <path class="c-beak-up" d="M64 29.5L73.5 31.8L64 33.6Z" fill="var(--beak)"/>
+                    <path class="c-beak-low" d="M64 33.2L71 33.4L64 36Z" fill="var(--beak-low)"/>
+                  </g>
+                </g>
+                <g class="c-heart" opacity="0"><path d="M50 8C41 2.5 45 -3.5 50 .5C55 -3.5 59 2.5 50 8Z" fill="#C8625A"/></g>
+              </g>
+            </svg>
+          </button>
+          <button class="critter chick chick-yellow" type="button" data-chick="yellow" data-no-bird aria-label="Yellow chick. Click to say hello">
+            <svg viewBox="0 0 80 80" aria-hidden="true">
+              <ellipse cx="40" cy="76.5" rx="15" ry="2" fill="#141414" opacity=".12"/>
+              <g class="c-flip">
+                <g class="c-leg-a"><path d="M35 58L34 72M34 72l-4.5 2.6M34 72l.8 4M34 72l4 2.4" fill="none" stroke="var(--leg)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></g>
+                <g class="c-leg-b"><path d="M43 58L43 72M43 72l-4.2 2.8M43 72l1 4M43 72l4.4 2" fill="none" stroke="var(--leg-far)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></g>
+                <g class="c-body">
+                  <path d="M17 45C11 41 11 34.5 15 31.5C16 37 20 40 23 41.5Z" fill="var(--wing)"/>
+                  <path d="M16 47C16 34 27 28 39 28C52 28 62 36 61 49C60 60 51 65 38 65C25 65 16 58 16 47Z" fill="var(--body)"/>
+                  <path d="M30 63C40 66 53 62 58 53C57 61 49 66 38 66C34 66 32 65 30 63Z" fill="var(--belly)"/>
+                  <g class="c-wing"><path d="M24 45C28 36 42 37 46 45C44 51 40 55 33 55C27 55 23 51 24 45Z" fill="var(--wing)"/><path d="M28 51.5C31 53 36 53 39 51.5M27 48C31 49.5 37 49.5 41 47.5" fill="none" stroke="var(--body)" stroke-width="1.1" stroke-linecap="round" opacity=".55"/></g>
+                  <g class="c-head">
+                    <circle cx="52" cy="30" r="14" fill="var(--body)"/>
+                    <path d="M47 17C45.5 12.5 48.5 10 51 12.2C51.8 8.8 55.8 9 56 12.6" fill="none" stroke="var(--wing)" stroke-width="2" stroke-linecap="round"/>
+                    <ellipse cx="58.5" cy="35" rx="3.4" ry="2.1" fill="var(--cheek)" opacity=".75"/>
+                    <g class="c-eye"><circle cx="57" cy="27" r="2.5" fill="var(--eye)"/><circle cx="57.8" cy="26.2" r=".8" fill="#FFF"/></g>
+                    <path class="c-beak-up" d="M64 29.5L73.5 31.8L64 33.6Z" fill="var(--beak)"/>
+                    <path class="c-beak-low" d="M64 33.2L71 33.4L64 36Z" fill="var(--beak-low)"/>
+                  </g>
+                </g>
+                <g class="c-heart" opacity="0"><path d="M50 8C41 2.5 45 -3.5 50 .5C55 -3.5 59 2.5 50 8Z" fill="#C8625A"/></g>
+              </g>
+            </svg>
+          </button>
+        </div>
         <svg class="meadow" viewBox="0 0 1600 80" preserveAspectRatio="none" aria-hidden="true"><g data-ground></g></svg>
         <div class="drift" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
       </div>
@@ -191,11 +260,12 @@
 
 <div class="sky" data-sky aria-hidden="true"></div>
 
-<script src="assets/birds.js?v=28" defer></script>
+<script src="assets/birds.js?v=40" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.3.11/dist/lenis.min.js" defer></script>
-<script src="assets/site.js?v=28" defer></script>
+<script src="assets/meadow.js?v=40" defer></script>
+<script src="assets/site.js?v=40" defer></script>
 </body>
 </html>

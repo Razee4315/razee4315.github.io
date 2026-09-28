@@ -56,7 +56,7 @@
     // Leaves are merged into one path per colour: a handful of nodes instead of hundreds.
     var foliage = [], currentFoliage, leafSources = [];
     function foliageFor(limb) {
-      if (!limb.foliage) { limb.foliage = { parent: limb.g, leaves: C.leaves.map(function () { return ''; }), ribs: '', stems: '' }; foliage.push(limb.foliage); }
+      if (!limb.foliage) { limb.foliage = { parent: limb.g, leaves: C.leaves.map(function () { return ''; }), ribs: '', stems: '', shoots: '' }; foliage.push(limb.foliage); }
       currentFoliage = limb.foliage;
     }
 
@@ -64,9 +64,10 @@
     el('circle', { cx: 1060, cy: 300, r: 170, fill: '#F3D3A0', opacity: .42 }, bg);
     el('circle', { cx: 1060, cy: 300, r: 112, fill: '#F6C98A', opacity: .32 }, bg);
 
-    function leafAt(x, y, deg, sc, ci) {
+    function leafAt(x, y, deg, sc, ci, wf) {
+      wf = wf || 1;
       var a = deg * Math.PI / 180, c = Math.cos(a) * sc, s = Math.sin(a) * sc;
-      var P = function (u, v) { return f1(x + u * c - v * s) + ' ' + f1(y + u * s + v * c); };
+      var P = function (u, v) { v *= wf; return f1(x + u * c - v * s) + ' ' + f1(y + u * s + v * c); };
       currentFoliage.leaves[ci] += 'M' + P(0, 0) + 'C' + P(8, -9) + ' ' + P(24, -10) + ' ' + P(36, 0) + 'C' + P(24, 10) + ' ' + P(8, 9) + ' ' + P(0, 0) + 'Z';
       currentFoliage.ribs += 'M' + P(0, 0) + 'Q' + P(14, -1) + ' ' + P(31, 0);
       leafSources.push({ x: x, y: y, angle: deg, scale: sc, color: C.leaves[ci] });
@@ -83,32 +84,83 @@
       if (name) limbs[name] = limb;
       return limb;
     }
-    // Each spray grows from a real branch point. Alternating leaves have visible petioles,
-    // air between their silhouettes, and smaller new growth near the shoot tip.
-    function cluster(x, y, baseDeg, n, spread) {
-      for (var j = 0; j < (n >= 9 ? 3 : 1); j++) {
-        var angle = (baseDeg + (j - (n >= 9 ? 1 : 0)) * 38 + (rng() - .5) * 18) * Math.PI / 180;
-        var len = 46 + rng() * 40, dx = Math.cos(angle), dy = Math.sin(angle);
-        var curve = [[x, y], [x + dx * len * .35 - dy * 9, y + dy * len * .35 + dx * 9],
-          [x + dx * len * .7 - dy * 7, y + dy * len * .7 + dx * 7], [x + dx * len, y + dy * len]];
-        currentFoliage.stems += 'M' + f1(x) + ' ' + f1(y) + 'C' + curve.slice(1).map(function (p) { return f1(p[0]) + ' ' + f1(p[1]); }).join(' ');
-        for (var k = 0; k < 6; k++) {
-          var t = .2 + k * .135, point = bz(curve, t), tangent = bzd(curve, t);
-          var a = Math.atan2(tangent.y, tangent.x) + (k % 2 ? 1 : -1) * ( .75 + rng() * .35);
-          var petiole = 4 + rng() * 3, lx = point.x + Math.cos(a) * petiole, ly = point.y + Math.sin(a) * petiole;
-          currentFoliage.stems += 'M' + f1(point.x) + ' ' + f1(point.y) + 'L' + f1(lx) + ' ' + f1(ly);
-          leafAt(lx, ly, a * 180 / Math.PI, (.48 + rng() * .32) * (1 - t * .26), Math.floor(rng() * C.leaves.length));
-        }
-        leafAt(curve[3][0], curve[3][1], angle * 180 / Math.PI, .42 + rng() * .16, 2);
+    // Growth: every limb carries alternating side shoots that bend toward the light; long shoots fork once.
+    // Leaves hang on petioles all along each shoot, larger near the limb and smaller toward the tip.
+    // A spatial hash keeps air between leaves so the canopy reads as leaves, not a green blob.
+    // Spacing radii never exceed one cell, so a 3x3 neighbourhood with numeric keys is enough.
+    var hash = new Map(), CELL = 12;
+    function room(x, y, r) {
+      var gx = Math.floor(x / CELL), gy = Math.floor(y / CELL);
+      for (var i = -1; i <= 1; i++) for (var j = -1; j <= 1; j++) {
+        var list = hash.get((gx + i) * 4096 + gy + j); if (!list) continue;
+        for (var k = 0; k < list.length; k += 3) { var dx = list[k] - x, dy = list[k + 1] - y, rr = r + list[k + 2]; if (dx * dx + dy * dy < rr * rr) return false; }
+      }
+      return true;
+    }
+    function claim(x, y, r) { var key = Math.floor(x / CELL) * 4096 + Math.floor(y / CELL), list = hash.get(key); if (!list) hash.set(key, list = []); list.push(x, y, r); }
+    function toward(a, b, k) { var d = Math.atan2(Math.sin(b - a), Math.cos(b - a)); return a + d * k; }
+    function taper(p, w0, w1) {
+      var L = [], Rr = [];
+      for (var i = 0; i <= 10; i++) { var t = i / 10, c = bz(p, t), n = nrm(bzd(p, t)), w = (w0 + (w1 - w0) * t) / 2; L.push([c.x + n.x * w, c.y + n.y * w]); Rr.push([c.x - n.x * w, c.y - n.y * w]); }
+      return 'M' + L.concat(Rr.reverse()).map(function (q) { return f1(q[0]) + ' ' + f1(q[1]); }).join('L') + 'Z';
+    }
+    // The crown: branches grow out to fill a rounded envelope above the trunk, like a real tree.
+    var crown = { cx: 800, cy: 368, rx: 640, ry: 292 };
+    function toCrown(x, y, a) {
+      var dx = Math.cos(a) / crown.rx, dy = Math.sin(a) / crown.ry, bx = (x - crown.cx) / crown.rx, by = (y - crown.cy) / crown.ry;
+      var A = dx * dx + dy * dy, B = 2 * (dx * bx + dy * by), D = B * B - 4 * A * (bx * bx + by * by - 1);
+      return D < 0 ? 0 : (-B + Math.sqrt(D)) / (2 * A);
+    }
+    function leavesAlong(p, from, spacing, big, inner) {
+      var len = 0, prev = bz(p, 0);
+      for (var i = 1; i <= 12; i++) { var q = bz(p, i / 12); len += Math.hypot(q.x - prev.x, q.y - prev.y); prev = q; }
+      var n = Math.max(2, Math.round(len * (1 - from) / spacing));
+      for (var k = 0; k < n; k++) {
+        var t = from + (k + .3 + rng() * .4) * ((1 - from) / n), pt = bz(p, t), tg = bzd(p, t), heading = Math.atan2(tg.y, tg.x);
+        var a = toward(heading + (k % 2 ? 1 : -1) * (.7 + rng() * .45), Math.PI / 2, .1 + rng() * .1);
+        var sc = (.7 + rng() * .42) * (1 - t * .3) * big, pet = 3 + rng() * 2.5;
+        var lx = pt.x + Math.cos(a) * pet, ly = pt.y + Math.sin(a) * pet, cx = lx + Math.cos(a) * 16 * sc, cy = ly + Math.sin(a) * 16 * sc;
+        if (!room(cx, cy, 5 * sc)) continue;
+        claim(cx, cy, 5 * sc);
+        currentFoliage.stems += 'M' + f1(pt.x) + ' ' + f1(pt.y) + 'L' + f1(lx) + ' ' + f1(ly);
+        var ci = inner && t < .6 ? (rng() < .6 ? 1 : 3) : (rng() < .42 ? 0 : rng() < .6 ? 4 : 2);
+        leafAt(lx, ly, a * 180 / Math.PI, sc, ci, .78 + rng() * .4);
+      }
+      var tip = bz(p, 1), end = Math.atan2(bzd(p, 1).y, bzd(p, 1).x);
+      [-.45, .45].forEach(function (o) {
+        var tx = tip.x + Math.cos(end + o) * 6, ty = tip.y + Math.sin(end + o) * 6;
+        if (room(tx, ty, 3.5)) { claim(tx, ty, 3.5); leafAt(tip.x, tip.y, (end + o) * 180 / Math.PI, .45 + rng() * .12, 2, .8); }
+      });
+    }
+    function curve(x, y, ang, len, sway) {
+      var dx = Math.cos(ang), dy = Math.sin(ang), px = -dy, py = dx, bend = (rng() - .5) * len * sway;
+      return [[x, y], [x + dx * len * .35 + px * bend * .35, y + dy * len * .35 + py * bend * .35], [x + dx * len * .7 + px * bend, y + dy * len * .7 + py * bend], [x + dx * len, y + dy * len]];
+    }
+    // Secondary branch: tapered, with tertiary shoots alternating along it and leaves on both.
+    function branch(x, y, ang, len, w) {
+      var p = curve(x, y, ang, len, .22);
+      currentFoliage.shoots += taper(p, w, Math.max(.9, w * .2));
+      leavesAlong(p, .42, 12, 1, true);
+      var n = Math.max(2, Math.round(len / 34));
+      for (var k = 0; k < n; k++) {
+        var t = .22 + k * (.7 / n) + rng() * .05, pt = bz(p, t), tg = bzd(p, t), heading = Math.atan2(tg.y, tg.x);
+        var a = toward(heading + (k % 2 ? 1 : -1) * (.55 + rng() * .35), -Math.PI / 2, .18);
+        var room2 = toCrown(pt.x, pt.y, a), sl = clamp(Math.min(room2 * .8, 36 + rng() * 46) * (1 - t * .35), 20, 90);
+        var q = curve(pt.x, pt.y, a, sl, .3);
+        currentFoliage.shoots += taper(q, Math.max(1.4, w * .42), .8);
+        leavesAlong(q, .12, 11, .92, false);
       }
     }
-    function twig(parent, t, angle, len, bend) {
-      foliageFor(parent);
-      var s = parent.spec, c = bz(s.p, t), a = angle * Math.PI / 180, dx = Math.cos(a), dy = Math.sin(a), px = -dy, py = dx, end = [c.x + dx * len, c.y + dy * len];
-      var spec = { p: [[c.x, c.y], [c.x + dx * len * .35 + px * bend * .3, c.y + dy * len * .35 + py * bend * .3], [end[0] - dx * len * .3 + px * bend, end[1] - dy * len * .3 + py * bend], end], w0: Math.min(widthAt(s, t) * .6, 13), w1: 2.2 };
-      addLimb(null, spec, parent.g);
-      cluster(end[0], end[1], angle, 16, 165);
-      var mid = bz(spec.p, .55); cluster(mid.x, mid.y, angle + (rng() > .5 ? 70 : -70), 6, 90);
+    function grow(limb, count, spread) {
+      foliageFor(limb);
+      for (var i = 0; i < count; i++) {
+        var t = .14 + (i + .25 + rng() * .5) * (.84 / count), c = bz(limb.spec.p, t), d = bzd(limb.spec.p, t), heading = Math.atan2(d.y, d.x);
+        var ang = toward(heading + (i % 2 ? 1 : -1) * (spread + rng() * .3), -Math.PI / 2, .16 + rng() * .1);
+        var reach = toCrown(c.x, c.y, ang), len = clamp(reach * (.55 + rng() * .35), 50, 300);
+        branch(c.x, c.y, ang, len, Math.min(widthAt(limb.spec, t) * .38, 9));
+      }
+      var e = bz(limb.spec.p, 1), de = bzd(limb.spec.p, 1), ea = Math.atan2(de.y, de.x);
+      branch(e.x, e.y, ea, clamp(toCrown(e.x, e.y, ea) * .7, 40, 160), 3.6);
     }
     function perch(limb, t) {
       var s = limb.spec, c = bz(s.p, t), n = up(nrm(bzd(s.p, t))), w = widthAt(s, t) / 2;
@@ -124,33 +176,19 @@
     var L2 = addLimb('L2', { p: [[796, 575], [704, 474], [596, 364], [488, 252]], w0: 26, w1: 5 }, trunk.g);
     var R2 = addLimb('R2', { p: [[804, 570], [898, 472], [1006, 362], [1114, 248]], w0: 26, w1: 5 }, trunk.g);
     var T = addLimb('T', { p: [[800, 560], [806, 430], [792, 300], [806, 150]], w0: 30, w1: 5 }, trunk.g);
-    twig(L1, .34, -108, 92, 12); twig(L1, .6, -122, 100, -12); twig(L1, .8, 62, 70, 10); twig(L1, .47, 70, 66, -8);
-    cluster(300, 472, 200, 14, 170);
-    twig(R1, .34, -72, 92, -12); twig(R1, .6, -58, 100, 12); twig(R1, .8, 118, 70, -10); twig(R1, .47, 110, 66, 8);
-    cluster(1300, 470, -20, 14, 170);
-    twig(L2, .4, -150, 82, 10); twig(L2, .66, -64, 90, -10); twig(L2, .5, 150, 64, 8);
-    cluster(488, 252, 225, 14, 170);
-    twig(R2, .4, -30, 82, -10); twig(R2, .66, -116, 90, 10); twig(R2, .5, 30, 64, -8);
-    cluster(1114, 248, -45, 14, 170);
-    twig(T, .45, -158, 82, 10); twig(T, .55, -22, 82, -10); twig(T, .75, -140, 64, 8); twig(T, .8, -40, 64, -8);
-    cluster(806, 150, -90, 16, 190);
-    foliageFor(D);
-    cluster(612, 730, 190, 10, 160);
-
-    // Interior shoots fill the canopy along the limbs, not just at their tips.
-    [L1, R1, L2, R2, T].forEach(function (limb, li) {
-      foliageFor(limb);
-      [.18, .31, .46, .62, .78, .9].forEach(function (t, i) {
-        var point = bz(limb.spec.p, t), tangent = bzd(limb.spec.p, t);
-        var heading = Math.atan2(tangent.y, tangent.x) * 180 / Math.PI;
-        cluster(point.x, point.y, heading + (i % 2 ? 62 : -62), i % 3 ? 6 : 12, 90);
-      });
+    // Smooth bark collars where the limbs leave the trunk, so the forks read as one piece of wood.
+    [[800, 570, 20, 17], [800, 641, 21, 13], [799, 772, 12, 8]].forEach(function (q) {
+      el('ellipse', { cx: q[0], cy: q[1], rx: q[2], ry: q[3], fill: C.bark }, trunkG);
     });
+    // Upper limbs first so the lower canopy is drawn in front of them.
+    grow(T, 6, .75); grow(L2, 6, .7); grow(R2, 6, .7); grow(L1, 7, .65); grow(R1, 7, .65); grow(D, 3, .6);
 
     foliage.forEach(function (f) {
       var g = el('g', { 'data-foliage': '' }, f.parent);
-      el('path', { d: f.stems, fill: 'none', stroke: C.barkLight, 'stroke-width': 1.4, 'stroke-linecap': 'round' }, g);
-      f.leaves.forEach(function (d, i) { el('path', { d: d, fill: C.leaves[i] }, g); });
+      el('path', { d: f.shoots, fill: C.bark }, g);
+      el('path', { d: f.stems, fill: 'none', stroke: C.barkLight, 'stroke-width': 1.3, 'stroke-linecap': 'round' }, g);
+      // Dark inner leaves first, light outer leaves last: depth without blur or shadows.
+      [1, 3, 0, 4, 2].forEach(function (i) { if (f.leaves[i]) el('path', { d: f.leaves[i], fill: C.leaves[i] }, g); });
       el('path', { d: f.ribs, fill: 'none', stroke: '#38503A', 'stroke-width': .65, opacity: .45 }, g);
     });
 
