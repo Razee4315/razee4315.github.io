@@ -20,6 +20,8 @@
   var flock = window.Birds ? Birds.flock({
     sky: $('[data-sky]'), tree: tree,
     onChange: function (n, max) {
+      var roostInvite = $('[data-roost-invite]');
+      if (roostInvite && n >= max) { roostInvite.disabled = true; roostInvite.textContent = 'The flock is complete'; }
       live.textContent = n >= max ? 'Ten birds. The flock is complete.' : (n === 1 ? 'One bird is out.' : n + ' birds are out.');
       if (n >= max) { inviteBtn.setAttribute('aria-disabled', 'true'); label.textContent = 'The flock is full'; }
     }

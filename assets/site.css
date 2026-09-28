@@ -81,7 +81,7 @@ h1, h2, p { margin: 0; }
 .lede { margin-top: 0; max-width: 30rem; font-size: var(--s-lede); line-height: 1.5; }
 .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 2rem; }
 
-.scene { position: relative; flex: 1; min-height: clamp(520px, 48vw, 860px); margin: 0; pointer-events: none; }
+.scene { position: relative; flex: 1; min-height: clamp(460px, 40vw, 720px); margin: 0; pointer-events: none; }
 .meadow { position: absolute; left: 0; bottom: 0; width: 100%; height: clamp(32px, 5vw, 64px); }
 .scene-art { position: absolute; inset: 0; overflow: clip; }
 .js .scene-art { clip-path: circle(0% at 50% 100%); }
@@ -101,15 +101,16 @@ h1, h2, p { margin: 0; }
 .drift i:nth-child(2)::before { animation-delay: -.2s; } .drift i:nth-child(3)::before { animation-delay: -.1s; } .drift i:nth-child(4)::before { animation-delay: -.3s; }
 @keyframes drift { from { transform: translate3d(62vw, 0, 0); } to { transform: translate3d(-12vw, -30px, 0); } }
 @keyframes vflap { to { transform: scaleY(.35); } }
-.fall i { position: absolute; top: 34%; width: 18px; height: 10px; opacity: 0; animation: fall 12s linear infinite;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 20'%3E%3Cpath d='M0 10C8 1 24 0 36 10C24 20 8 19 0 10Z' fill='%237F9464'/%3E%3C/svg%3E") center/contain no-repeat; }
-.fall i:nth-child(1) { left: 36%; animation-delay: 1s; }
-.fall i:nth-child(2) { left: 58%; top: 26%; animation-delay: 5.5s; }
-.fall i:nth-child(3) { left: 22%; top: 40%; animation-delay: 9s; }
-@keyframes fall {
-  0% { transform: translate3d(0, 0, 0) rotate(0); opacity: 0; } 8% { opacity: .9; }
-  35% { transform: translate3d(-34px, 120px, 0) rotate(120deg); } 65% { transform: translate3d(22px, 250px, 0) rotate(240deg); }
-  88% { opacity: .9; } 100% { transform: translate3d(-10px, 380px, 0) rotate(330deg); opacity: 0; }
+.falling-leaf { opacity: 0; animation: canopy-fall 16s linear infinite; animation-play-state: paused; }
+.tree-active .falling-leaf { animation-play-state: running; }
+@keyframes canopy-fall {
+  0%, 8% { opacity: 0; transform: translate(0, 0) rotate(0); }
+  12% { opacity: .9; transform: translate(0, 0) rotate(0); }
+  30% { transform: translate(calc(var(--drift) * .6), calc(var(--drop) * .2)) rotate(65deg) scaleX(.55); }
+  48% { transform: translate(calc(var(--drift) * -.35), calc(var(--drop) * .44)) rotate(-35deg) scaleX(1); }
+  66% { transform: translate(var(--drift), calc(var(--drop) * .7)) rotate(100deg) scaleX(.45); opacity: .9; }
+  82% { transform: translate(calc(var(--drift) * .5), var(--drop)) rotate(160deg); opacity: 0; }
+  100% { transform: translate(calc(var(--drift) * .5), var(--drop)) rotate(160deg); opacity: 0; }
 }
 
 /* ---------- Catalogue: one full-colour band per project, always open ---------- */
@@ -140,15 +141,30 @@ h1, h2, p { margin: 0; }
 .band-shot img { width: 100%; height: auto; box-shadow: 12px 12px 0 var(--hi); }
 .band:nth-child(even) .band-shot img { box-shadow: -12px 12px 0 var(--hi); }
 
-/* ---------- Footer: quiet links and a short colophon ---------- */
-.foot { border-top: 1px solid var(--rule); }
-.foot-inner { display: grid; grid-template-columns: 1fr auto; gap: 32px; max-width: calc(var(--max) + 2 * var(--pad-x)); margin: 0 auto; padding: 64px var(--pad-x) 28px; }
-.foot-name { font-size: 24px; font-weight: 600; letter-spacing: -.03em; }
-.foot-about p { margin-top: 8px; color: var(--stone); }
-.foot-links { display: flex; flex-wrap: wrap; align-items: start; gap: 8px 28px; }
-.foot-links a { display: inline-flex; align-items: center; gap: 8px; padding: 8px 0; text-decoration: underline; text-underline-offset: 5px; text-decoration-color: var(--rule); }
+/* ---------- The evening roost ---------- */
+.foot { border-top: 1px solid var(--rule); background: #E5E4D8; }
+.foot-inner { display: flex; flex-direction: column; justify-content: space-between; gap: 28px; min-height: 100svh; max-width: 1280px; margin: 0 auto; padding: clamp(48px, 7vh, 80px) var(--pad-x) 32px; }
+.roost-intro { text-align: center; }
+.roost-intro h2 { margin: 12px 0; font: 400 clamp(42px, 5vw, 72px)/1 var(--serif); }
+.roost-intro > p:last-child { color: var(--stone); }
+.roost { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 32px 24px; width: min(100%, 900px); margin: 16px auto; }
+.roost-cell { display: flex; flex-direction: column; align-items: center; gap: 36px; }
+.roost-letter { font: 400 clamp(44px, 6vw, 88px)/1 var(--serif); color: var(--bird-color, #246C60); opacity: 0; transform: translateY(8px); transition: opacity .6s var(--ease-out), transform .6s var(--ease-out); }
+.roost-cell.occupied .roost-letter { opacity: 1; transform: none; }
+.nest { width: min(100%, 108px); }
+.nest svg { width: 100%; height: auto; }
+.roost-actions { display: flex; align-items: center; justify-content: center; gap: 24px; flex-wrap: wrap; }
+.foot-bottom { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding-top: 24px; border-top: 1px solid var(--rule); }
+.foot-name { font-size: 22px; font-weight: 600; letter-spacing: -.03em; }
+.foot-links { display: flex; flex-wrap: wrap; gap: 12px 24px; }
+.foot-links a { padding: 8px 0; text-decoration: underline; text-underline-offset: 5px; text-decoration-color: var(--rule); }
 .foot-links a:hover { text-decoration-color: currentColor; }
-.foot-meta { grid-column: 1 / -1; color: var(--stone); padding-top: 24px; border-top: 1px solid var(--rule); }
+@media (max-width: 600px) {
+  .roost { gap: 28px 12px; }
+  .roost-cell { gap: 32px; }
+  .foot-bottom { flex-direction: column; align-items: flex-start; }
+  .roost-intro > p:last-child { max-width: 28ch; margin: auto; }
+}
 
 /* ---------- The flock ---------- */
 .sky { position: absolute; top: 0; left: 0; width: 100%; pointer-events: none; z-index: 60; }
@@ -187,7 +203,7 @@ h1, h2, p { margin: 0; }
   .logo svg { width: 58px; height: 58px; }
 }
 @media (max-width: 520px) {
-  .foot-inner { grid-template-columns: 1fr; gap: 24px; padding-top: 40px; }
+
   .cat-head { flex-direction: column; gap: 8px; }
   .band-title { gap: 12px; }
   .logo svg { width: 48px; height: 48px; }
@@ -196,5 +212,5 @@ h1, h2, p { margin: 0; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
   .js .scene-art { clip-path: none; }
-  .drift, .fall { display: none; }
+  .drift, .falling-leaf { display: none; }
 }

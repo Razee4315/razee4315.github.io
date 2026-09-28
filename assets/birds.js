@@ -52,19 +52,24 @@
   function tree(svg) {
     var world = svg.querySelector('[data-world]');
     var rng = seeded(20260928);
-    var perches = [], limbs = {}, blossoms = [];
+    var perches = [], limbs = {};
     // Leaves are merged into one path per colour: a handful of nodes instead of hundreds.
-    var leafD = C.leaves.map(function () { return ''; }), puffD = ['', ''], ribD = '';
+    var foliage = [], currentFoliage, leafSources = [];
+    function foliageFor(limb) {
+      if (!limb.foliage) { limb.foliage = { parent: limb.g, leaves: C.leaves.map(function () { return ''; }), ribs: '', stems: '' }; foliage.push(limb.foliage); }
+      currentFoliage = limb.foliage;
+    }
 
-    var bg = el('g', {}, world), back = el('g', {}, world), trunkG = el('g', {}, world);
+    var bg = el('g', {}, world), trunkG = el('g', {}, world);
     el('circle', { cx: 1060, cy: 300, r: 170, fill: '#F3D3A0', opacity: .42 }, bg);
     el('circle', { cx: 1060, cy: 300, r: 112, fill: '#F6C98A', opacity: .32 }, bg);
 
     function leafAt(x, y, deg, sc, ci) {
       var a = deg * Math.PI / 180, c = Math.cos(a) * sc, s = Math.sin(a) * sc;
       var P = function (u, v) { return f1(x + u * c - v * s) + ' ' + f1(y + u * s + v * c); };
-      leafD[ci] += 'M' + P(0, 0) + 'C' + P(8, -9) + ' ' + P(24, -10) + ' ' + P(36, 0) + 'C' + P(24, 10) + ' ' + P(8, 9) + ' ' + P(0, 0) + 'Z';
-      ribD += 'M' + P(3, 0) + 'L' + P(30, 0);
+      currentFoliage.leaves[ci] += 'M' + P(0, 0) + 'C' + P(8, -9) + ' ' + P(24, -10) + ' ' + P(36, 0) + 'C' + P(24, 10) + ' ' + P(8, 9) + ' ' + P(0, 0) + 'Z';
+      currentFoliage.ribs += 'M' + P(0, 0) + 'Q' + P(14, -1) + ' ' + P(31, 0);
+      leafSources.push({ x: x, y: y, angle: deg, scale: sc, color: C.leaves[ci] });
     }
     function addLimb(name, spec, parent) {
       var g = el('g', {}, parent), d = limbPath(spec, rng);
@@ -78,16 +83,27 @@
       if (name) limbs[name] = limb;
       return limb;
     }
+    // Each spray grows from a real branch point. Alternating leaves have visible petioles,
+    // air between their silhouettes, and smaller new growth near the shoot tip.
     function cluster(x, y, baseDeg, n, spread) {
-      for (var b = 0; b < 3 && n >= 9; b++) {
-        var ba = (baseDeg + (rng() - .5) * 120) * Math.PI / 180, br = 16 + rng() * 22, rx = 34 + rng() * 22, ry = 22 + rng() * 12;
-        var cx = x + Math.cos(ba) * br, cy = y + Math.sin(ba) * br, i2 = rng() > .5 ? 0 : 1;
-        puffD[i2] += 'M' + f1(cx - rx) + ' ' + f1(cy) + 'a' + f1(rx) + ' ' + f1(ry) + ' 0 1 0 ' + f1(rx * 2) + ' 0a' + f1(rx) + ' ' + f1(ry) + ' 0 1 0 ' + f1(-rx * 2) + ' 0Z';
+      for (var j = 0; j < (n >= 9 ? 3 : 1); j++) {
+        var angle = (baseDeg + (j - (n >= 9 ? 1 : 0)) * 38 + (rng() - .5) * 18) * Math.PI / 180;
+        var len = 46 + rng() * 40, dx = Math.cos(angle), dy = Math.sin(angle);
+        var curve = [[x, y], [x + dx * len * .35 - dy * 9, y + dy * len * .35 + dx * 9],
+          [x + dx * len * .7 - dy * 7, y + dy * len * .7 + dx * 7], [x + dx * len, y + dy * len]];
+        currentFoliage.stems += 'M' + f1(x) + ' ' + f1(y) + 'C' + curve.slice(1).map(function (p) { return f1(p[0]) + ' ' + f1(p[1]); }).join(' ');
+        for (var k = 0; k < 6; k++) {
+          var t = .2 + k * .135, point = bz(curve, t), tangent = bzd(curve, t);
+          var a = Math.atan2(tangent.y, tangent.x) + (k % 2 ? 1 : -1) * ( .75 + rng() * .35);
+          var petiole = 4 + rng() * 3, lx = point.x + Math.cos(a) * petiole, ly = point.y + Math.sin(a) * petiole;
+          currentFoliage.stems += 'M' + f1(point.x) + ' ' + f1(point.y) + 'L' + f1(lx) + ' ' + f1(ly);
+          leafAt(lx, ly, a * 180 / Math.PI, (.48 + rng() * .32) * (1 - t * .26), Math.floor(rng() * C.leaves.length));
+        }
+        leafAt(curve[3][0], curve[3][1], angle * 180 / Math.PI, .42 + rng() * .16, 2);
       }
-      for (var i = 0; i < n; i++) { var a = baseDeg + (rng() - .5) * spread, r = rng() * 14, rad = a * Math.PI / 180; leafAt(x + Math.cos(rad) * r, y + Math.sin(rad) * r, a, .95 + rng() * .8, Math.floor(rng() * C.leaves.length)); }
-      if (rng() > .35) blossoms.push([x + (rng() - .5) * 26, y + (rng() - .5) * 20, .85 + rng() * .5]);
     }
     function twig(parent, t, angle, len, bend) {
+      foliageFor(parent);
       var s = parent.spec, c = bz(s.p, t), a = angle * Math.PI / 180, dx = Math.cos(a), dy = Math.sin(a), px = -dy, py = dx, end = [c.x + dx * len, c.y + dy * len];
       var spec = { p: [[c.x, c.y], [c.x + dx * len * .35 + px * bend * .3, c.y + dy * len * .35 + py * bend * .3], [end[0] - dx * len * .3 + px * bend, end[1] - dy * len * .3 + py * bend], end], w0: Math.min(widthAt(s, t) * .6, 13), w1: 2.2 };
       addLimb(null, spec, parent.g);
@@ -109,28 +125,41 @@
     var R2 = addLimb('R2', { p: [[804, 570], [898, 472], [1006, 362], [1114, 248]], w0: 26, w1: 5 }, trunk.g);
     var T = addLimb('T', { p: [[800, 560], [806, 430], [792, 300], [806, 150]], w0: 30, w1: 5 }, trunk.g);
     twig(L1, .34, -108, 92, 12); twig(L1, .6, -122, 100, -12); twig(L1, .8, 62, 70, 10); twig(L1, .47, 70, 66, -8);
-    cluster(300, 470, 200, 14, 170);
+    cluster(300, 472, 200, 14, 170);
     twig(R1, .34, -72, 92, -12); twig(R1, .6, -58, 100, 12); twig(R1, .8, 118, 70, -10); twig(R1, .47, 110, 66, 8);
-    cluster(1300, 468, -20, 14, 170);
+    cluster(1300, 470, -20, 14, 170);
     twig(L2, .4, -150, 82, 10); twig(L2, .66, -64, 90, -10); twig(L2, .5, 150, 64, 8);
-    cluster(488, 250, 225, 14, 170);
+    cluster(488, 252, 225, 14, 170);
     twig(R2, .4, -30, 82, -10); twig(R2, .66, -116, 90, 10); twig(R2, .5, 30, 64, -8);
-    cluster(1114, 246, -45, 14, 170);
+    cluster(1114, 248, -45, 14, 170);
     twig(T, .45, -158, 82, 10); twig(T, .55, -22, 82, -10); twig(T, .75, -140, 64, 8); twig(T, .8, -40, 64, -8);
-    cluster(806, 148, -90, 16, 190);
+    cluster(806, 150, -90, 16, 190);
+    foliageFor(D);
     cluster(612, 730, 190, 10, 160);
 
-    el('path', { d: puffD[0], fill: '#B9C49C', opacity: .5 }, back);
-    el('path', { d: puffD[1], fill: '#A8B78C', opacity: .5 }, back);
-    var leavesG = el('g', {}, world);
-    leafD.forEach(function (d, i) { el('path', { d: d, fill: C.leaves[i] }, leavesG); });
-    el('path', { d: ribD, stroke: '#2E3D2C', 'stroke-width': 1.2, 'stroke-linecap': 'round', opacity: .28 }, leavesG);
-    var bl = '', bc = '';
-    blossoms.forEach(function (q) {
-      for (var i = 0; i < 5; i++) { var a = i * Math.PI * 2 / 5, cx = q[0] + Math.cos(a) * 6.5 * q[2], cy = q[1] + Math.sin(a) * 6.5 * q[2], r = 5.6 * q[2]; bl += 'M' + f1(cx - r) + ' ' + f1(cy) + 'a' + f1(r) + ' ' + f1(r) + ' 0 1 0 ' + f1(r * 2) + ' 0a' + f1(r) + ' ' + f1(r) + ' 0 1 0 ' + f1(-r * 2) + ' 0Z'; }
-      var rc = 3.8 * q[2]; bc += 'M' + f1(q[0] - rc) + ' ' + f1(q[1]) + 'a' + f1(rc) + ' ' + f1(rc) + ' 0 1 0 ' + f1(rc * 2) + ' 0a' + f1(rc) + ' ' + f1(rc) + ' 0 1 0 ' + f1(-rc * 2) + ' 0Z';
+    foliage.forEach(function (f) {
+      var g = el('g', { 'data-foliage': '' }, f.parent);
+      el('path', { d: f.stems, fill: 'none', stroke: C.barkLight, 'stroke-width': 1.4, 'stroke-linecap': 'round' }, g);
+      f.leaves.forEach(function (d, i) { el('path', { d: d, fill: C.leaves[i] }, g); });
+      el('path', { d: f.ribs, fill: 'none', stroke: '#38503A', 'stroke-width': .65, opacity: .45 }, g);
     });
-    el('path', { d: bl, fill: C.blossom }, leavesG); el('path', { d: bc, fill: C.blossomCore }, leavesG);
+
+    // A few real canopy positions seed falling leaves. Only transforms/opacity animate;
+    // foliage and its fine stems stay in their limb group during gusts and bird landings.
+    for (var fi = 0; fi < 5; fi++) {
+      var source = leafSources[Math.floor((fi + .5) * leafSources.length / 5)];
+      var anchor = el('g', { transform: 'translate(' + f1(source.x) + ' ' + f1(source.y) + ')' }, world);
+      var falling = el('g', { 'class': 'falling-leaf' }, anchor);
+      falling.style.setProperty('--drop', f1(920 - source.y) + 'px');
+      falling.style.setProperty('--drift', (fi % 2 ? -1 : 1) * (35 + fi * 12) + 'px');
+      falling.style.animationDuration = (12 + fi * 1.7) + 's';
+      falling.style.animationDelay = (2 + fi * 2.8) + 's';
+      el('path', { d: 'M0 0C8 -9 24 -10 36 0C24 10 8 9 0 0Z', fill: source.color,
+        transform: 'rotate(' + f1(source.angle) + ') scale(' + f1(source.scale) + ')' }, falling);
+    }
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (entries) { svg.classList.toggle('tree-active', entries[0].isIntersecting); }).observe(svg);
+    } else svg.classList.add('tree-active');
 
     [.3, .56, .8].forEach(function (t) { perch(L1, t); });
     [.3, .58, .8].forEach(function (t) { perch(R1, t); });
@@ -160,12 +189,12 @@
     // Three merged paths keep hundreds of blades inexpensive; drawn only once.
     var ground = svg.parentNode.querySelector('[data-ground]'), grass = ['', '', ''];
     if (ground) {
-      el('path', { d: 'M0 75Q200 68 400 75T800 75T1200 75T1600 75V82H0Z', fill: '#0C1F1B' }, ground);
       for (var gx = -6; gx <= 1606; gx += 3) {
         var h = 12 + rng() * 46, lean = (rng() - .5) * 24, ci = Math.floor(rng() * 3);
         grass[ci] += 'M' + f1(gx) + ' 82Q' + f1(gx + lean * .25) + ' ' + f1(82 - h * .7) + ' ' + f1(gx + lean) + ' ' + f1(82 - h);
       }
       grass.forEach(function (d, i) { el('path', { d: d, fill: 'none', stroke: ['#8FA372', '#7F9464', '#5E7A56'][i], 'stroke-width': 2, 'stroke-linecap': 'round' }, ground); });
+      el('path', { d: 'M0 69Q200 66 400 69T800 69T1200 69T1600 69V82H0Z', fill: '#0C1F1B' }, ground);
     }
 
     function client(node, x, y) { var m = node.getScreenCTM(); return m ? { x: m.a * x + m.c * y + m.e, y: m.b * x + m.d * y + m.f } : null; }
@@ -274,6 +303,15 @@
     var birds = [], view = { left: 0, top: 0, right: 0, bottom: 0 }, off = { x: 0, y: 0 };
     var T = 0, last = 0, pointer = { x: -1e4, y: -1e4, t: -1 }, scrollDir = 0, lastScroll = 0, talkT = 4, songs = 0, gustT = 8;
     var measure = document.createElement('canvas').getContext('2d'), textCache = new Map();
+    var nests = Array.prototype.slice.call(document.querySelectorAll('[data-nest]')), homes = [], homeClock = 0;
+    nests.forEach(function (nest, i) { nest.parentNode.style.setProperty('--bird-color', STYLES[i].dark); });
+    function occupancy(b, on) {
+      var nest = nests[birds.indexOf(b)];
+      if (nest) nest.parentNode.classList.toggle('occupied', on);
+      var status = document.querySelector('[data-roost-status]');
+      if (status) status.textContent = nests.filter(function (n) { return n.parentNode.classList.contains('occupied'); }).length + ' of 10 birds at home';
+    }
+    function measureHomes() { homes = nests.map(function (nest) { var sp = { kind: 'nest', el: nest }, p = resolve(sp); return p && visible(p) ? sp : null; }); }
     var audio = null, soundOn = opts.sound !== false, running = false;
 
     function measureView() {
@@ -287,6 +325,7 @@
     function resolve(sp) {
       if (!sp) return null;
       switch (sp.kind) {
+        case 'nest': { var nr = sp.el.getBoundingClientRect(); return nr.width ? toSky(nr.left + nr.width / 2, nr.top + nr.height * .27) : null; }
         case 'edge': { var r = sp.el.getBoundingClientRect(); return r.width ? toSky(r.left + sp.frac * r.width, r.top) : null; }
         case 'text': {
           if (!sp.node.isConnected || sp.i >= sp.node.data.length) return null;
@@ -323,6 +362,7 @@
     }
     function choose(b, o) {
       o = o || {};
+      var home = homes[birds.indexOf(b)]; if (home) return home;
       var cands = [];
       function add(sp, w) {
         var p = resolve(sp); if (!p || !visible(p)) return;
@@ -386,6 +426,7 @@
       return b;
     }
     function flyTo(b, sp, land) {
+      if (b.spot && b.spot.kind === 'nest') occupancy(b, false);
       var tgt = resolve(sp) || b.pos, p0 = { x: b.pos.x, y: b.pos.y }, dx = tgt.x - p0.x, dy = tgt.y - p0.y, L = Math.hypot(dx, dy) || 1, sp0 = Math.hypot(b.vel.x, b.vel.y);
       var c1 = sp0 > 60 ? { x: p0.x + b.vel.x / sp0 * clamp(L * .4, 50, 240), y: p0.y + b.vel.y / sp0 * clamp(L * .4, 50, 240) } : { x: p0.x + dx * .18, y: p0.y - clamp(40 + L * .22, 50, 130) };
       var wob = (Math.random() - .5) * L * .6;
@@ -410,6 +451,7 @@
       var sp = b.fl.spot, v = Math.hypot(b.vel.x, b.vel.y);
       b.mode = 'perched'; b.spot = sp; b.fl = null; b.squash = .8; b.legsR = 0;
       b.tailV += 260; b.stay = sp.kind === 'tree' ? rand(5, 10) : rand(3, 7); b.fidget = rand(.5, 1.2);
+      if (sp.kind === 'nest') { b.stay = 1e9; occupancy(b, true); }
       b.singT = Math.random() < .25 ? rand(.6, 1.4) : -1;
       if (sp.kind === 'tree' && tr) tr.bump(sp.i, clamp(.7 + v / 400, .7, 1.4));
       if (opts.onLand) opts.onLand(sp, b);
@@ -493,7 +535,7 @@
       if (!visible(p, 30)) { if (b.flee < 0) b.flee = rand(.12, .4); } else b.flee = -1;
       if ((b.flee >= 0 && (b.flee -= dt) < 0) || (b.stay -= dt) < 0) { crouch(b); return; }
       var head = { x: b.pos.x, y: b.pos.y - b.w * .45 }, d = Math.hypot(pointer.x - head.x, pointer.y - head.y);
-      if (T - pointer.t < .25 && d < 70) { crouch(b, { x: (head.x - pointer.x) / (d || 1), y: (head.y - pointer.y) / (d || 1) }); return; }
+      if (b.spot.kind !== 'nest' && T - pointer.t < .25 && d < 70) { crouch(b, { x: (head.x - pointer.x) / (d || 1), y: (head.y - pointer.y) / (d || 1) }); return; }
       if (b.singT > 0 && (b.singT -= dt) <= 0) notes(b);
       if ((b.fidget -= dt) < 0 && !b.hop) {
         b.fidget = rand(.6, 2.2);
@@ -553,9 +595,11 @@
     function frame(now) {
       var dt = last ? Math.min((now - last) / 1000, 1 / 20) : 1 / 60; last = now; T += dt;
       measureView();
+      homeClock -= dt; if (homeClock <= 0) { measureHomes(); homeClock = .35; }
       var y = -off.y; scrollDir = Math.abs(y - lastScroll) > .5 ? Math.sign(y - lastScroll) : damp(scrollDir, 0, .8, dt); lastScroll = y;
       for (var i = 0; i < birds.length; i++) {
-        var b = birds[i];
+        var b = birds[i], home = homes[i];
+        if (home && !(b.spot && b.spot.el === home.el) && !(b.fl && b.fl.spot.el === home.el)) flyTo(b, home, true);
         if (b.mode === 'pop') {
           b.popT += dt; b.scale = damp(b.scale, 1, 16, dt);
           if (b.popT > .3 && b.popT - dt <= .3) b.bow = 1;
@@ -594,7 +638,7 @@
         return false;
       }
       var b = make(STYLES[birds.length], p.x, p.y);
-      if (reduce) { var s2 = choose(b, {}); b.scale = 1; b.squash = 1; if (s2) { b.pos = resolve(s2); b.spot = s2; b.mode = 'perched'; b.stay = 1e9; } draw(b); }
+      if (reduce) { var s2 = choose(b, {}); b.scale = 1; b.squash = 1; if (s2) { b.pos = resolve(s2); b.spot = s2; b.mode = 'perched'; b.stay = 1e9; if (s2.kind === 'nest') occupancy(b, true); } draw(b); }
       chirp(b.style.pitch, 2);
       if (opts.onChange) opts.onChange(birds.length, MAX);
       if (!reduce) start();
@@ -620,6 +664,27 @@
     document.addEventListener('pointermove', function (e) { var p = toSky(e.clientX, e.clientY); pointer = { x: p.x, y: p.y, t: T }; }, { passive: true });
     new ResizeObserver(sizeSky).observe(document.body);
     sizeSky(); measureView();
+    var roostInvite = document.querySelector('[data-roost-invite]');
+    if (roostInvite) roostInvite.addEventListener('click', function () {
+      measureView(); measureHomes(); var r = roostInvite.getBoundingClientRect(); spawnAt(r.left + r.width / 2, r.top - 20);
+      if (birds.length >= MAX) { roostInvite.disabled = true; roostInvite.textContent = 'The flock is complete'; }
+    });
+    // Reduced motion settles birds without flight; coalesce scrolling into one layout read.
+    if (reduce) {
+      var homePending = false;
+      function settleHomes() {
+        if (homePending) return; homePending = true;
+        requestAnimationFrame(function () {
+          homePending = false; measureView(); measureHomes();
+          birds.forEach(function (b, i) {
+            if (homes[i]) { b.spot = homes[i]; b.pos = resolve(b.spot); b.mode = 'perched'; occupancy(b, true); draw(b); }
+            else if (b.spot && b.spot.kind === 'nest') occupancy(b, false);
+          });
+        });
+      }
+      window.addEventListener('scroll', settleHomes, { passive: true });
+      window.addEventListener('resize', settleHomes); settleHomes();
+    }
 
     return {
       spawnAt: spawnAt, spawnFromHouse: spawnFromHouse, spawnOnTree: spawnOnTree,
