@@ -160,6 +160,7 @@
     // Three merged paths keep hundreds of blades inexpensive; drawn only once.
     var ground = svg.parentNode.querySelector('[data-ground]'), grass = ['', '', ''];
     if (ground) {
+      el('path', { d: 'M0 75Q200 68 400 75T800 75T1200 75T1600 75V82H0Z', fill: '#0C1F1B' }, ground);
       for (var gx = -6; gx <= 1606; gx += 3) {
         var h = 12 + rng() * 46, lean = (rng() - .5) * 24, ci = Math.floor(rng() * 3);
         grass[ci] += 'M' + f1(gx) + ' 82Q' + f1(gx + lean * .25) + ' ' + f1(82 - h * .7) + ' ' + f1(gx + lean) + ' ' + f1(82 - h);

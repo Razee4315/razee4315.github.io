@@ -81,9 +81,9 @@ h1, h2, p { margin: 0; }
 .lede { margin-top: 0; max-width: 30rem; font-size: var(--s-lede); line-height: 1.5; }
 .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 2rem; }
 
-.scene { position: relative; flex: 1; min-height: 380px; margin: 0; pointer-events: none; }
+.scene { position: relative; flex: 1; min-height: clamp(520px, 48vw, 860px); margin: 0; pointer-events: none; }
 .meadow { position: absolute; left: 0; bottom: 0; width: 100%; height: clamp(32px, 5vw, 64px); }
-.scene-art { position: absolute; inset: 0; }
+.scene-art { position: absolute; inset: 0; overflow: clip; }
 .js .scene-art { clip-path: circle(0% at 50% 100%); }
 .scene-art.grown { clip-path: circle(150% at 50% 100%); transition: clip-path 1.8s var(--ease-out); }
 .scene-art.done { clip-path: none; }
@@ -113,7 +113,9 @@ h1, h2, p { margin: 0; }
 }
 
 /* ---------- Catalogue: one full-colour band per project, always open ---------- */
-.catalogue { padding: var(--section) 0 0; }
+.catalogue { padding: 28px 0 0; background: #0C1F1B; }
+.cat-head .label { color: #B9C9C0; }
+.band:first-child .band-inner { padding-top: 48px; }
 .cat-head { display: flex; justify-content: space-between; gap: 16px; max-width: calc(var(--max) + 2 * var(--pad-x)); margin: 0 auto 28px; padding: 0 var(--pad-x); }
 .bands { list-style: none; margin: 0; padding: 0; }
 .band { background: var(--bg); color: var(--fg); }
@@ -178,7 +180,7 @@ h1, h2, p { margin: 0; }
   .hero-type { grid-template-columns: 1fr; gap: 24px; padding-bottom: 32px; }
   .hero-details { justify-self: start; }
   .scene { min-height: clamp(280px, 60vw, 480px); }
-  .catalogue { padding-top: calc(var(--section) * .5); }
+
   .band-copy, .band:nth-child(even) .band-copy { grid-column: 1 / -1; grid-row: 1; }
   .band-shot, .band:nth-child(even) .band-shot { grid-column: 1 / -1; grid-row: 2; margin-top: 2.25rem; }
   .band:nth-child(even) .band-shot img { box-shadow: 10px 10px 0 var(--hi); }

@@ -29,6 +29,8 @@
 - ADR-24 (owner revision) Replace the dark giant animated wordmark and pinned colophon with a compact paper footer: name, a one-line description, GitHub, LinkedIn and Back to the tree. No pinning, letter interactions or footer choreography. Cache version 20.
 - Validation: Chromium at 1920x1080, 1440x900, 1024x600, 768x1024, 375x812, 320x568 and 844x390; reduced motion at 375px and CDN-failure fallback at 1440px. No page errors or horizontal overflow; grass and trunk baseline exactly match the hero bottom, including after scrolling. All project logo animation names are none; removed controls absent; birds silent; Invite works; responsive viewBox switches correctly.
 
+- ADR-25 (owner feedback, 2026-09-28) Increase the desktop scene minimum height to clamp(520px, 48vw, 860px), letting the tree grow substantially while retaining separate text space. Keep the mobile crop and baseline. Remove the large catalogue top gap: grass now meets a shallow dark ground contour and the matching dark catalogue header, with tighter first-project spacing. Clip falling leaves to the scene so they cannot escape below the grass. Cache version 21. Verified at 1920, 1440 and 375px: no console errors or horizontal overflow; zero gap between meadow and catalogue; inspected full hero and scrolled transition screenshots.
+
 ## Performance and accessibility targets
 LCP < 2.5s (h1 text), CLS < 0.1 (all media sized), INP < 200ms (no work in scroll handlers). Contrast: ink on paper ≈ 15.9:1; stone on paper ≈ 4.9:1. Keyboard: skip link, rows are links, Invite is a button, visible focus everywhere, aria-live bird count, aria-label on split headings, no hover-only content on touch.
 
