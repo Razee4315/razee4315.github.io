@@ -186,7 +186,7 @@
         var source = leafSources[Math.floor(rng() * leafSources.length)], drop = 920 - source.y, drift = (rng() - .5) * 180;
         part.origin.setAttribute('transform', 'translate(' + f1(source.x) + ' ' + f1(source.y) + ')');
         part.shape.setAttribute('fill', source.color);
-        part.shape.setAttribute('transform', 'rotate(' + f1(source.angle) + ') scale(' + f1(source.scale) + ')');
+        part.shape.setAttribute('transform', 'rotate(' + f1(source.angle) + ') scale(' + f1(source.scale * 1.4) + ')');
         part.animation = part.fall.animate([
           { opacity: 0, transform: 'translate(0,0) rotate(0deg)' },
           { opacity: 1, transform: 'translate(0,0) rotate(0deg)', offset: .06 },

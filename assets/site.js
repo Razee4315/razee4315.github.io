@@ -37,6 +37,14 @@
     setTimeout(function () { flock.spawnOnTree(5); }, reduce ? 0 : 650);
 
     inviteBtn.addEventListener('click', function () { flock.spawnFromHouse(); });
+    // The tree owns its click so the document's no-bird guard cannot swallow it.
+    sceneSvg.addEventListener('click', function (event) { flock.spawnAt(event.clientX, event.clientY); });
+    sceneSvg.addEventListener('keydown', function (event) {
+      if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); flock.spawnFromHouse(); }
+    });
+    sceneSvg.addEventListener('pointerdown', function () { sceneSvg.classList.remove('keyboard-focus'); });
+    document.addEventListener('keydown', function (event) { if (event.key === 'Tab') sceneSvg.classList.add('keyboard-focus'); });
+
     document.addEventListener('click', function (e) {
       var t = e.target; if (e.button !== 0 || !t || !t.closest || t.closest('a, button, input, textarea, select, label, [data-no-bird]')) return;
       var sel = window.getSelection && String(window.getSelection()); if (sel) return;
@@ -57,27 +65,50 @@
       { transform: 'translate(0,0)' }
     ], { duration: 1900, easing: 'ease-in-out' });
   });
-  chicks.addEventListener('click', function () {
+  // Short, alternating play routines: explore, chase, peck, then an occasional greeting.
+  var playStep = 0, playTimer, rabbitTimer, residentsVisible = false;
+  function playChicks(clicked) {
     if (reduce) {
-      clearTimeout(greetingTimer); chicks.classList.add('is-greeting');
-      greetingTimer = setTimeout(function () { chicks.classList.remove('is-greeting'); }, 2200); return;
+      if (clicked) { clearTimeout(greetingTimer); chicks.classList.add('is-greeting'); greetingTimer = setTimeout(function () { chicks.classList.remove('is-greeting'); }, 1400); }
+      return;
     }
     greetings.forEach(function (animation) { animation.cancel(); }); greetings = [];
+    var mode = playStep++ % 4;
+    chicks.dataset.activity = ['exploring', 'chasing', 'pecking', 'greeting'][mode];
+    var paths = [
+      [[0, -16, -8, 18, 0], [0, 14, 4, -18, 0]],
+      [[0, 42, 60, 20, 0], [0, 18, -12, -36, 0]],
+      [[0, 12, 12, -6, 0], [0, -12, -12, 8, 0]],
+      [[0, 24, 42, 42, 0], [0, -24, -42, -42, 0]]
+    ][mode];
     ['.chick-black', '.chick-yellow'].forEach(function (selector, i) {
-      var node = $(selector, chicks), start = getComputedStyle(node).transform, sign = i ? -1 : 1;
-      greetings.push(node.animate([
-        { transform: start }, { transform: 'translate(' + sign * 20 + 'px,-4px)', offset: .18 },
-        { transform: 'translate(' + sign * 42 + 'px,0)', offset: .35 },
-        { transform: 'translate(' + sign * 42 + 'px,0)', offset: .65 },
-        { transform: 'translate(' + sign * 20 + 'px,-4px)', offset: .82 }, { transform: start }
-      ], { duration: 4200, easing: 'ease-in-out' }));
+      var node = $(selector, chicks);
+      var frames = paths[i].map(function (x, k) { return { transform: 'translate(' + x + 'px,' + (k % 2 && mode !== 3 ? -7 : 0) + 'px)' + (mode === 2 && (k === 1 || k === 2) ? ' rotate(' + (i ? -16 : 16) + 'deg)' : '') }; });
+      greetings.push(node.animate(frames, { duration: mode === 1 ? 2600 : 3600, easing: 'ease-in-out' }));
     });
-    greetings.push($('.chick-hearts', chicks).animate([
-      { opacity: 0, transform: 'translateY(0)' }, { opacity: 0, offset: .3 },
-      { opacity: 1, offset: .42 }, { opacity: 1, transform: 'translateY(-6px)', offset: .62 },
-      { opacity: 0, transform: 'translateY(-16px)' }
-    ], { duration: 4200 }));
-  });
+    if (mode === 3) greetings.push($('.chick-hearts', chicks).animate([
+      { opacity: 0, transform: 'translateY(0)' }, { opacity: 0, offset: .4 },
+      { opacity: 1, offset: .55 }, { opacity: 0, transform: 'translateY(-14px)' }
+    ], { duration: 3600 }));
+  }
+  function schedulePlay() {
+    clearTimeout(playTimer);
+    if (!residentsVisible || document.hidden || reduce) return;
+    playChicks(false); playTimer = setTimeout(schedulePlay, 4200);
+  }
+  function scheduleRabbit() {
+    clearTimeout(rabbitTimer);
+    if (!residentsVisible || document.hidden || reduce) return;
+    rabbit.click(); rabbitTimer = setTimeout(scheduleRabbit, 5800 + Math.random() * 2300);
+  }
+  function resumeResidents() {
+    clearTimeout(playTimer); clearTimeout(rabbitTimer);
+    if (residentsVisible && !document.hidden) { schedulePlay(); scheduleRabbit(); }
+    else { greetings.forEach(function (animation) { animation.cancel(); }); if (rabbitMotion) rabbitMotion.cancel(); }
+  }
+  chicks.addEventListener('click', function () { clearTimeout(playTimer); playChicks(true); if (residentsVisible && !reduce) playTimer = setTimeout(schedulePlay, 4200); });
+  new IntersectionObserver(function (entries) { residentsVisible = entries[0].isIntersecting; resumeResidents(); }).observe(rabbit);
+  document.addEventListener('visibilitychange', resumeResidents);
 
   /* ================= nav: hide going down, show going up; mark the project on screen ================= */
   var nav = $('[data-nav]'), lastY = window.scrollY;

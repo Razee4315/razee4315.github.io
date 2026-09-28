@@ -42,6 +42,8 @@
 
 - ADR-31 Name correction includes a newly rendered 1200x630 social card using HTML/CSS and existing project screenshots, saved as og.png. Social and local asset cache version 27.
 
+- ADR-32 (owner feedback, 2026-09-28) Tree pointer/keyboard activation now explicitly releases one bird in addition to the leaf shower; keep the generic no-bird guard to prevent double spawns. Restrict the tree outline to keyboard navigation, and enlarge click-shower leaves for visibility. Replace the repeated chick greeting loop with four short routines (explore, chase, peck, occasional hearts), triggered about every four seconds while visible. Rabbit hops autonomously every six to eight seconds and on click. Stop routines offscreen/in hidden tabs, and retain reduced-motion static responses. Cache version 28. Verified at 1440px and 375px plus reduced motion: exactly one bird per tree activation, visibly animated leaves, no mouse-focus outline, keyboard-focus outline present, animal clicks do not spawn birds, routines advance, no page errors or horizontal overflow.
+
 ## Performance and accessibility targets
 LCP < 2.5s (h1 text), CLS < 0.1 (all media sized), INP < 200ms (no work in scroll handlers). Contrast: ink on paper ≈ 15.9:1; stone on paper ≈ 4.9:1. Keyboard: skip link, rows are links, Invite is a button, visible focus everywhere, aria-live bird count, aria-label on split headings, no hover-only content on touch.
 
