@@ -21,8 +21,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=JetBrains+Mono:wght@500&display=swap">
-<link rel="stylesheet" href="assets/site.css?v=13">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=JetBrains+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="assets/site.css?v=18">
 <script>
   (function () {
     var r = document.documentElement;
@@ -64,6 +64,7 @@
   </nav>
   <div class="nav-end">
     <button class="nav-birds mono" type="button" data-nav-birds aria-label="Release a bird"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 15c3-.6 5.2-3.2 7.4-4.4 3.4-1.8 6.3-.4 8.1-2.2l2 1.1-1.9 1.6c0 4.2-3.2 7.4-8 7.4-3.4 0-6-1.2-7.6-3.5z" fill="currentColor"/></svg><span data-nav-count>0/10</span></button>
+    <button class="nav-sound" type="button" data-sound aria-pressed="true" aria-label="Bird sounds on"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="i-on" d="M11 5 6 9H3v6h3l5 4zM15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/><path class="i-off" d="M11 5 6 9H3v6h3l5 4zM22 9l-6 6m0-6 6 6"/></svg></button>
     <a class="nav-gh" href="https://github.com/Razee4315" aria-label="GitHub"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.1-1.47-1.1-1.47-.9-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.08.63-1.33-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02a9.6 9.6 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2.2z" fill="currentColor"/></svg></a>
   </div>
 </header>
@@ -72,7 +73,8 @@
   <!-- ============ HERO ============ -->
   <section class="hero" id="top" aria-labelledby="hero-title">
         <div class="hero-type">
-      <h1 id="hero-title" class="h1" data-split data-perch="text">Five free tools.<br>One small tree.</h1>
+      <p class="eyebrow mono" data-hero-fade>Saqlain Razee · independent software</p>
+      <h1 id="hero-title" class="h1" data-split data-perch="text">Five free tools.<br>One <em>small</em> tree.</h1>
       <p class="lede" data-hero-fade>I'm Saqlain. I make small, open-source apps for everyday annoyances. Pick one below, or click anywhere to set a bird loose.</p>
       <div class="actions" data-hero-fade>
         <a class="btn btn-ink" href="#catalogue" data-perch="edge"><span>See the tools</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v15m0 0-6-6m6 6 6-6"/></svg></a>
@@ -82,17 +84,13 @@
 
     <figure class="scene" data-scene>
       <div class="scene-art">
-        <svg class="scene-svg" viewBox="90 150 940 874" preserveAspectRatio="xMidYMid meet" role="img" aria-labelledby="scene-title">
+        <svg class="scene-svg" viewBox="0 0 1600 940" preserveAspectRatio="xMidYMax meet" role="img" aria-labelledby="scene-title">
           <title id="scene-title">A small tree with a hanging birdhouse. Birds you invite fly around the page.</title>
           <g data-world></g>
         </svg>
         <div class="drift" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
         <div class="fall" aria-hidden="true"><i></i><i></i><i></i></div>
       </div>
-      <figcaption class="scene-bar mono">
-        <span>Click anywhere to invite a bird</span>
-        <button class="sound" type="button" data-sound aria-pressed="true" aria-label="Bird sounds on"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="i-on" d="M11 5 6 9H3v6h3l5 4zM15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/><path class="i-off" d="M11 5 6 9H3v6h3l5 4zM22 9l-6 6m0-6 6 6"/></svg></button>
-      </figcaption>
       <p class="sr-only" aria-live="polite" data-live></p>
     </figure>
   </section>
@@ -193,11 +191,11 @@
 
 <div class="sky" data-sky aria-hidden="true"></div>
 
-<script src="assets/birds.js?v=13" defer></script>
+<script src="assets/birds.js?v=18" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.3.11/dist/lenis.min.js" defer></script>
-<script src="assets/site.js?v=13" defer></script>
+<script src="assets/site.js?v=18" defer></script>
 </body>
 </html>

@@ -57,8 +57,8 @@
     var leafD = C.leaves.map(function () { return ''; }), puffD = ['', ''], ribD = '';
 
     var bg = el('g', {}, world), back = el('g', {}, world), trunkG = el('g', {}, world);
-    el('circle', { cx: 640, cy: 360, r: 175, fill: '#F3D3A0', opacity: .42 }, bg);
-    el('circle', { cx: 640, cy: 360, r: 118, fill: '#F6C98A', opacity: .32 }, bg);
+    el('circle', { cx: 1060, cy: 300, r: 170, fill: '#F3D3A0', opacity: .42 }, bg);
+    el('circle', { cx: 1060, cy: 300, r: 112, fill: '#F6C98A', opacity: .32 }, bg);
 
     function leafAt(x, y, deg, sc, ci) {
       var a = deg * Math.PI / 180, c = Math.cos(a) * sc, s = Math.sin(a) * sc;
@@ -99,20 +99,26 @@
       perches.push({ x: c.x + n.x * (w - 1), y: c.y + n.y * (w - 1), layer: limb.g, limb: limb });
     }
 
-    var trunk = addLimb('trunk', { p: [[884, 1060], [874, 920], [826, 800], [804, 640]], w0: 88, w1: 46 }, trunkG);
-    el('ellipse', { cx: 846, cy: 905, rx: 10, ry: 15, fill: C.barkDark, opacity: .85 }, trunk.g);
-    var D = addLimb('D', { p: [[852, 870], [770, 858], [680, 866], [560, 832]], w0: 24, w1: 5 }, trunk.g);
-    var A = addLimb('A', { p: [[812, 712], [660, 700], [430, 650], [118, 566]], w0: 38, w1: 6 }, trunk.g);
-    var Cc = addLimb('C', { p: [[808, 646], [834, 524], [882, 404], [1004, 312]], w0: 28, w1: 6 }, trunk.g);
-    var B = addLimb('B', { p: [[802, 660], [720, 566], [580, 474], [356, 336]], w0: 30, w1: 5 }, trunk.g);
-    twig(A, .30, -118, 108, 16); twig(A, .12, -84, 96, -10); twig(A, .55, -96, 88, 12); twig(A, .84, 70, 70, 10); twig(A, .47, 62, 84, -12); twig(A, .70, -128, 118, 14); twig(A, .93, -160, 70, 10);
-    cluster(124, 564, 190, 12, 160);
-    twig(B, .45, -62, 110, -14); twig(B, .88, -78, 84, 10); twig(B, .6, 58, 76, -10); twig(B, .72, -122, 100, 12); twig(B, .24, -100, 80, 10);
-    cluster(358, 334, 212, 12, 160);
-    twig(Cc, .46, -168, 92, 14); twig(Cc, .28, -150, 80, 12); twig(Cc, .6, -8, 84, -10); twig(Cc, .74, -44, 100, -12);
-    cluster(1002, 312, -30, 12, 160);
-    twig(D, .72, 112, 66, 8);
-    cluster(562, 832, 180, 9, 150);
+    // A straight trunk in the middle; two branches reach left, two reach right, a leader grows up the centre.
+    var trunk = addLimb('trunk', { p: [[800, 906], [800, 790], [800, 665], [800, 540]], w0: 74, w1: 42 }, trunkG);
+    el('ellipse', { cx: 812, cy: 800, rx: 9, ry: 14, fill: C.barkDark, opacity: .85 }, trunk.g);
+    var D = addLimb('D', { p: [[798, 770], [740, 752], [680, 756], [612, 730]], w0: 20, w1: 4 }, trunk.g);
+    var L1 = addLimb('L1', { p: [[792, 640], [650, 612], [480, 566], [300, 472]], w0: 32, w1: 5 }, trunk.g);
+    var R1 = addLimb('R1', { p: [[808, 632], [950, 604], [1120, 556], [1300, 470]], w0: 32, w1: 5 }, trunk.g);
+    var L2 = addLimb('L2', { p: [[796, 575], [704, 474], [596, 364], [488, 252]], w0: 26, w1: 5 }, trunk.g);
+    var R2 = addLimb('R2', { p: [[804, 570], [898, 472], [1006, 362], [1114, 248]], w0: 26, w1: 5 }, trunk.g);
+    var T = addLimb('T', { p: [[800, 560], [806, 430], [792, 300], [806, 150]], w0: 30, w1: 5 }, trunk.g);
+    twig(L1, .34, -108, 92, 12); twig(L1, .6, -122, 100, -12); twig(L1, .8, 62, 70, 10); twig(L1, .47, 70, 66, -8);
+    cluster(300, 470, 200, 14, 170);
+    twig(R1, .34, -72, 92, -12); twig(R1, .6, -58, 100, 12); twig(R1, .8, 118, 70, -10); twig(R1, .47, 110, 66, 8);
+    cluster(1300, 468, -20, 14, 170);
+    twig(L2, .4, -150, 82, 10); twig(L2, .66, -64, 90, -10); twig(L2, .5, 150, 64, 8);
+    cluster(488, 250, 225, 14, 170);
+    twig(R2, .4, -30, 82, -10); twig(R2, .66, -116, 90, 10); twig(R2, .5, 30, 64, -8);
+    cluster(1114, 246, -45, 14, 170);
+    twig(T, .45, -158, 82, 10); twig(T, .55, -22, 82, -10); twig(T, .75, -140, 64, 8); twig(T, .8, -40, 64, -8);
+    cluster(806, 148, -90, 16, 190);
+    cluster(612, 730, 190, 10, 160);
 
     el('path', { d: puffD[0], fill: '#B9C49C', opacity: .5 }, back);
     el('path', { d: puffD[1], fill: '#A8B78C', opacity: .5 }, back);
@@ -126,15 +132,16 @@
     });
     el('path', { d: bl, fill: C.blossom }, leavesG); el('path', { d: bc, fill: C.blossomCore }, leavesG);
 
-    [.2, .37, .64, .81].forEach(function (t) { perch(A, t); });
-    [.32, .56, .8].forEach(function (t) { perch(B, t); });
-    perch(Cc, .83);
-    [.56, .86].forEach(function (t) { perch(D, t); });
+    [.3, .56, .8].forEach(function (t) { perch(L1, t); });
+    [.3, .58, .8].forEach(function (t) { perch(R1, t); });
+    [.46, .76].forEach(function (t) { perch(L2, t); });
+    [.46, .76].forEach(function (t) { perch(R2, t); });
+    perch(T, .66); perch(D, .66);
 
-    // Birdhouse hanging under branch A.
+    // Birdhouse hanging under the right low branch.
     var house = (function () {
-      var t = .5, c = bz(A.spec.p, t), n = up(nrm(bzd(A.spec.p, t))), w = widthAt(A.spec, t) / 2, hx = c.x - n.x * w, hy = c.y - n.y * w, ry = hy + 54;
-      var g = el('g', {}, A.g);
+      var t = .44, c = bz(R1.spec.p, t), n = up(nrm(bzd(R1.spec.p, t))), w = widthAt(R1.spec, t) / 2, hx = c.x - n.x * w, hy = c.y - n.y * w, ry = hy + 54;
+      var g = el('g', {}, R1.g);
       g.style.transformBox = 'view-box'; g.style.transformOrigin = f1(hx) + 'px ' + f1(hy) + 'px';
       el('path', { d: 'M' + f1(hx) + ' ' + f1(hy) + 'V' + f1(ry + 6), stroke: C.stone, 'stroke-width': 2.2 }, g);
       el('rect', { x: f1(hx - 36), y: f1(ry + 28), width: 72, height: 74, fill: '#E6D8C0' }, g);
@@ -151,11 +158,11 @@
 
     // Grass and small flowers at the foot of the trunk.
     var ground = el('g', {}, world), gd = '';
-    for (var gx = 640; gx <= 1030; gx += 7 + rng() * 6) { var h = 18 + rng() * 42, lean = (rng() - .5) * 26; gd += 'M' + f1(gx) + ' 1024Q' + f1(gx + lean * .4) + ' ' + f1(1024 - h * .6) + ' ' + f1(gx + lean) + ' ' + f1(1024 - h); }
+    for (var gx = 560; gx <= 1040; gx += 7 + rng() * 6) { var h = 14 + rng() * 38 * (1 - Math.abs(gx - 800) / 300), lean = (rng() - .5) * 26; gd += 'M' + f1(gx) + ' 904Q' + f1(gx + lean * .4) + ' ' + f1(904 - h * .6) + ' ' + f1(gx + lean) + ' ' + f1(904 - h); }
     el('path', { d: gd, fill: 'none', stroke: '#5E7A56', 'stroke-width': 3, 'stroke-linecap': 'round' }, ground);
     var fd = '', fc = '';
-    [[700, 996], [760, 1006], [968, 1000], [1004, 990]].forEach(function (q) {
-      el('path', { d: 'M' + q[0] + ' 1024V' + q[1], stroke: '#3F5A45', 'stroke-width': 2.2 }, ground);
+    [[640, 878], [712, 884], [900, 880], [966, 872]].forEach(function (q) {
+      el('path', { d: 'M' + q[0] + ' 904V' + q[1], stroke: '#3F5A45', 'stroke-width': 2.2 }, ground);
       for (var i = 0; i < 5; i++) { var a = i * Math.PI * 2 / 5, cx = q[0] + Math.cos(a) * 4.5, cy = q[1] + Math.sin(a) * 4.5; fd += 'M' + f1(cx - 4) + ' ' + f1(cy) + 'a4 4 0 1 0 8 0a4 4 0 1 0 -8 0Z'; }
       fc += 'M' + (q[0] - 2.6) + ' ' + q[1] + 'a2.6 2.6 0 1 0 5.2 0a2.6 2.6 0 1 0 -5.2 0Z';
     });
@@ -178,7 +185,7 @@
         swing(p.limb.g, (p.x < p.limb.px ? -1 : 1) * 1.3 * strength, 1100);
       },
       houseSwing: function () { swing(house.g, 7, 1600); },
-      gust: function () { ['A', 'B', 'C', 'D'].forEach(function (k, i) { var l = limbs[k]; setTimeout(function () { swing(l.g, (k === 'C' ? 1 : -1) * .7, 2600); }, i * 140); }); }
+      gust: function () { ['L1', 'L2', 'T', 'R2', 'R1'].forEach(function (k, i) { var l = limbs[k]; setTimeout(function () { swing(l.g, (k.charAt(0) === 'R' ? 1 : -1) * .6, 2600); }, i * 140); }); }
     };
   }
 

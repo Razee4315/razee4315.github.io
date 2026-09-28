@@ -14,7 +14,12 @@
       inviteBtn = $('[data-invite]'), soundBtn = $('[data-sound]'), birdsLine = $('[data-birds-line]');
   var navCount = $('[data-nav-count]'), navBirds = $('[data-nav-birds]');
   function poke(row) { row.classList.remove('poke'); void row.offsetWidth; row.classList.add('poke'); setTimeout(function () { row.classList.remove('poke'); }, 850); }
-  var tree = window.Birds ? Birds.tree($('.scene-svg')) : null;
+  var sceneSvg = $('.scene-svg'), compactScene = window.matchMedia('(max-width: 960px)');
+  // Reframe the existing drawing at the breakpoint; never rebuild its paths or perches.
+  function frameTree() { sceneSvg.setAttribute('viewBox', compactScene.matches ? '200 80 1200 860' : '0 0 1600 940'); }
+  frameTree();
+  compactScene.addEventListener('change', frameTree);
+  var tree = window.Birds ? Birds.tree(sceneSvg) : null;
   var flock = window.Birds ? Birds.flock({
     sky: $('[data-sky]'), tree: tree,
     onChange: function (n, max) {
@@ -134,6 +139,7 @@
       var split = SplitText.create(h1, { type: 'lines', mask: 'lines', autoSplit: true, onSplit: function (self) { self.lines.forEach(function (l) { l.setAttribute('aria-hidden', 'true'); }); } });
       gsap.timeline()
         .fromTo('.nav', { autoAlpha: 0 }, { autoAlpha: 1, duration: .8, ease: 'power2.out' }, 0)
+        .fromTo('.eyebrow', { autoAlpha: 0, y: 8 }, { autoAlpha: 1, y: 0, duration: .8 }, .05)
         .from(split.lines, { yPercent: 110, duration: 1, stagger: .1 }, .1)
         .fromTo('.lede', { autoAlpha: 0, y: 16 }, { autoAlpha: 1, y: 0 }, .4)
         .fromTo('.actions', { autoAlpha: 0, scale: .95, transformOrigin: '0% 50%' }, { autoAlpha: 1, scale: 1, duration: .8 }, .55);
