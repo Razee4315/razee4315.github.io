@@ -87,7 +87,36 @@ h1, h2, p { margin: 0; }
 .js .scene-art { clip-path: circle(0% at 50% 100%); }
 .scene-art.grown { clip-path: circle(150% at 50% 100%); transition: clip-path 1.8s var(--ease-out); }
 .scene-art.done { clip-path: none; }
-.scene-svg { width: 100%; height: 100%; }
+.scene-svg { width: 100%; height: 100%; pointer-events: auto; cursor: pointer; }
+.scene-svg:focus-visible { outline-offset: -4px; }
+
+/* Grass residents stay separate from the ten flying birds and their nests. */
+.grass-animal { position: absolute; bottom: 8px; z-index: 1; border: 0; padding: 0; background: transparent; cursor: pointer; pointer-events: auto; -webkit-tap-highlight-color: transparent; }
+.grass-animal svg { width: 100%; overflow: visible; }
+.rabbit { left: 20%; width: clamp(100px, 12vw, 170px); }
+.chicks { right: 16%; width: clamp(160px, 17vw, 240px); }
+.meadow { z-index: 2; pointer-events: none; }
+.rabbit-ears { transform-origin: 108px 58px; animation: rabbit-listen 9s ease-in-out infinite; }
+.rabbit-body { transform-origin: 78px 100px; animation: rabbit-breathe 3s ease-in-out infinite; }
+.chick-black { --chick-body: #32302D; --chick-wing: #504B42; --chick-eye: #F8E6B0; animation: chick-left 18s linear infinite; }
+.chick-yellow { --chick-body: #F1D475; --chick-wing: #D8AD48; --chick-eye: #342C1C; animation: chick-right 18s linear infinite; }
+.chick-hearts { opacity: 0; animation: chick-love 18s linear infinite; }
+.grass-animal g { animation-play-state: paused; }
+.scene-active .grass-animal g { animation-play-state: running; }
+@keyframes rabbit-listen { 0%, 65%, 100% { transform: rotate(0); } 72% { transform: rotate(-7deg); } 80% { transform: rotate(3deg); } }
+@keyframes rabbit-breathe { 0%, 100% { transform: scaleY(1); } 50% { transform: scaleY(1.025); } }
+@keyframes chick-left {
+  0%, 12%, 100% { transform: translate(0, 0); }
+  20% { transform: translate(13px, -3px); } 28% { transform: translate(26px, 0); } 36% { transform: translate(36px, -3px); }
+  44%, 60% { transform: translate(42px, 0); } 68% { transform: translate(30px, -3px); } 76% { transform: translate(18px, 0); } 84% { transform: translate(6px, -3px); } 92% { transform: translate(0, 0); }
+}
+@keyframes chick-right {
+  0%, 12%, 100% { transform: translate(0, 0); }
+  20% { transform: translate(-13px, 0); } 28% { transform: translate(-26px, -3px); } 36% { transform: translate(-36px, 0); }
+  44%, 60% { transform: translate(-42px, 0); } 68% { transform: translate(-30px, 0); } 76% { transform: translate(-18px, -3px); } 84% { transform: translate(-6px, 0); } 92% { transform: translate(0, 0); }
+}
+@keyframes chick-love { 0%, 43%, 66%, 100% { opacity: 0; transform: translateY(0); } 48%, 58% { opacity: 1; } 65% { opacity: 0; transform: translateY(-12px); } }
+@media (max-width: 600px) { .rabbit { left: 3%; } .chicks { right: 1%; } }
 
 /* Distant flock and falling leaves: pure CSS, compositor-only. */
 .drift { position: absolute; left: 0; right: 0; top: 16%; height: 70px; pointer-events: none; overflow: hidden; }
@@ -213,4 +242,6 @@ h1, h2, p { margin: 0; }
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
   .js .scene-art { clip-path: none; }
   .drift, .falling-leaf { display: none; }
+  .grass-animal g { animation: none !important; }
+  .chicks.is-greeting .chick-hearts { opacity: 1; }
 }

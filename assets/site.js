@@ -44,6 +44,41 @@
     });
   }
 
+  /* ================= meadow residents ================= */
+  var rabbit = $('[data-rabbit]'), chicks = $('[data-chicks]');
+  var rabbitMotion = null, greetings = [], greetingTimer;
+  rabbit.addEventListener('click', function () {
+    if (reduce) { rabbit.setAttribute('aria-label', 'The rabbit says hello'); return; }
+    if (rabbitMotion) rabbitMotion.cancel();
+    rabbitMotion = $('.rabbit-hop', rabbit).animate([
+      { transform: 'translate(0,0)' }, { transform: 'translate(8px,-14px)', offset: .16 },
+      { transform: 'translate(22px,0)', offset: .3 }, { transform: 'translate(30px,-10px)', offset: .46 },
+      { transform: 'translate(40px,0)', offset: .6 }, { transform: 'translate(22px,-12px)', offset: .8 },
+      { transform: 'translate(0,0)' }
+    ], { duration: 1900, easing: 'ease-in-out' });
+  });
+  chicks.addEventListener('click', function () {
+    if (reduce) {
+      clearTimeout(greetingTimer); chicks.classList.add('is-greeting');
+      greetingTimer = setTimeout(function () { chicks.classList.remove('is-greeting'); }, 2200); return;
+    }
+    greetings.forEach(function (animation) { animation.cancel(); }); greetings = [];
+    ['.chick-black', '.chick-yellow'].forEach(function (selector, i) {
+      var node = $(selector, chicks), start = getComputedStyle(node).transform, sign = i ? -1 : 1;
+      greetings.push(node.animate([
+        { transform: start }, { transform: 'translate(' + sign * 20 + 'px,-4px)', offset: .18 },
+        { transform: 'translate(' + sign * 42 + 'px,0)', offset: .35 },
+        { transform: 'translate(' + sign * 42 + 'px,0)', offset: .65 },
+        { transform: 'translate(' + sign * 20 + 'px,-4px)', offset: .82 }, { transform: start }
+      ], { duration: 4200, easing: 'ease-in-out' }));
+    });
+    greetings.push($('.chick-hearts', chicks).animate([
+      { opacity: 0, transform: 'translateY(0)' }, { opacity: 0, offset: .3 },
+      { opacity: 1, offset: .42 }, { opacity: 1, transform: 'translateY(-6px)', offset: .62 },
+      { opacity: 0, transform: 'translateY(-16px)' }
+    ], { duration: 4200 }));
+  });
+
   /* ================= nav: hide going down, show going up; mark the project on screen ================= */
   var nav = $('[data-nav]'), lastY = window.scrollY;
   function onScroll(y) {

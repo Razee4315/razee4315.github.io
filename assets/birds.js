@@ -137,6 +137,16 @@
     foliageFor(D);
     cluster(612, 730, 190, 10, 160);
 
+    // Interior shoots fill the canopy along the limbs, not just at their tips.
+    [L1, R1, L2, R2, T].forEach(function (limb, li) {
+      foliageFor(limb);
+      [.18, .31, .46, .62, .78, .9].forEach(function (t, i) {
+        var point = bz(limb.spec.p, t), tangent = bzd(limb.spec.p, t);
+        var heading = Math.atan2(tangent.y, tangent.x) * 180 / Math.PI;
+        cluster(point.x, point.y, heading + (i % 2 ? 62 : -62), i % 3 ? 6 : 12, 90);
+      });
+    });
+
     foliage.forEach(function (f) {
       var g = el('g', { 'data-foliage': '' }, f.parent);
       el('path', { d: f.stems, fill: 'none', stroke: C.barkLight, 'stroke-width': 1.4, 'stroke-linecap': 'round' }, g);
@@ -157,9 +167,37 @@
       el('path', { d: 'M0 0C8 -9 24 -10 36 0C24 10 8 9 0 0Z', fill: source.color,
         transform: 'rotate(' + f1(source.angle) + ') scale(' + f1(source.scale) + ')' }, falling);
     }
+    var scene = svg.parentNode;
+    function sceneActive(active) { svg.classList.toggle('tree-active', active); scene.classList.toggle('scene-active', active); }
     if ('IntersectionObserver' in window) {
-      new IntersectionObserver(function (entries) { svg.classList.toggle('tree-active', entries[0].isIntersecting); }).observe(svg);
-    } else svg.classList.add('tree-active');
+      new IntersectionObserver(function (entries) { sceneActive(entries[0].isIntersecting); }).observe(svg);
+    } else sceneActive(true);
+    // Reuse a bounded set of leaves for click showers. No nodes are added per click.
+    var shower = [];
+    for (var si = 0; si < 12; si++) {
+      var origin = el('g', { 'data-leaf-burst': '' }, world), fall = el('g', { opacity: 0 }, origin);
+      var shape = el('path', { d: 'M0 0C8 -9 24 -10 36 0C24 10 8 9 0 0Z' }, fall);
+      shower.push({ origin: origin, fall: fall, shape: shape, animation: null });
+    }
+    function shakeLeaves() {
+      if (reduce) return;
+      shower.forEach(function (part, i) {
+        if (part.animation) part.animation.cancel();
+        var source = leafSources[Math.floor(rng() * leafSources.length)], drop = 920 - source.y, drift = (rng() - .5) * 180;
+        part.origin.setAttribute('transform', 'translate(' + f1(source.x) + ' ' + f1(source.y) + ')');
+        part.shape.setAttribute('fill', source.color);
+        part.shape.setAttribute('transform', 'rotate(' + f1(source.angle) + ') scale(' + f1(source.scale) + ')');
+        part.animation = part.fall.animate([
+          { opacity: 0, transform: 'translate(0,0) rotate(0deg)' },
+          { opacity: 1, transform: 'translate(0,0) rotate(0deg)', offset: .06 },
+          { opacity: 1, transform: 'translate(' + f1(drift) + 'px,' + f1(drop * .3) + 'px) rotate(70deg) scaleX(.6)', offset: .38 },
+          { opacity: .9, transform: 'translate(' + f1(-drift * .4) + 'px,' + f1(drop * .65) + 'px) rotate(-35deg)', offset: .68 },
+          { opacity: 0, transform: 'translate(' + f1(drift * .6) + 'px,' + f1(drop) + 'px) rotate(150deg)' }
+        ], { duration: 3500 + rng() * 1600, delay: i * 55, easing: 'linear' });
+      });
+    }
+    svg.addEventListener('click', shakeLeaves);
+    svg.addEventListener('keydown', function (event) { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); shakeLeaves(); } });
 
     [.3, .56, .8].forEach(function (t) { perch(L1, t); });
     [.3, .58, .8].forEach(function (t) { perch(R1, t); });
@@ -303,7 +341,10 @@
     var birds = [], view = { left: 0, top: 0, right: 0, bottom: 0 }, off = { x: 0, y: 0 };
     var T = 0, last = 0, pointer = { x: -1e4, y: -1e4, t: -1 }, scrollDir = 0, lastScroll = 0, talkT = 4, songs = 0, gustT = 8;
     var measure = document.createElement('canvas').getContext('2d'), textCache = new Map();
-    var nests = Array.prototype.slice.call(document.querySelectorAll('[data-nest]')), homes = [], homeClock = 0;
+    var nests = Array.prototype.slice.call(document.querySelectorAll('[data-nest]')).sort(function (a, b) {
+      function owner(n) { var i = Number(n.dataset.nest); return i === 6 ? 7 : i === 7 ? 6 : i; }
+      return owner(a) - owner(b);
+    }), homes = [], homeClock = 0;
     nests.forEach(function (nest, i) { nest.parentNode.style.setProperty('--bird-color', STYLES[i].dark); });
     function occupancy(b, on) {
       var nest = nests[birds.indexOf(b)];
