@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Page not found · Saqlain Razee</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<style>
+  :root { --bg: #F6F4EE; --text: #1B2420; --muted: #5C6863; --accent: #0F6B62; color-scheme: light dark; }
+  @media (prefers-color-scheme: dark) { :root { --bg: #0F1715; --text: #EAF0EC; --muted: #9DAEA7; --accent: #8CDCC1; } }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 17px/1.6 "Segoe UI", system-ui, -apple-system, sans-serif; }
+  main { width: min(100% - 32px, 640px); margin: 0 auto; padding: 72px 0; }
+  h1 { margin: 0; font-size: 2rem; }
+  p { color: var(--muted); }
+  a { color: var(--accent); font-weight: 600; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Page not found</h1>
+  <p id="hint">This page doesn't exist. Project addresses are case-sensitive.</p>
+  <p><a href="https://razee4315.github.io/snipflag/">Snipflag</a> · <a href="https://razee4315.github.io/Paperling/">Paperling</a> · <a href="https://razee4315.github.io/Vuoom/">Vuoom</a> · <a href="https://razee4315.github.io/coldframe/">coldframe</a> · <a href="https://razee4315.github.io/">All projects</a></p>
+</main>
+<script>
+  // Send visitors who typed the wrong capitalization (e.g. /paperling/) to the real project.
+  (function () {
+    var projects = ['snipflag', 'Paperling', 'Vuoom', 'coldframe'];
+    var parts = location.pathname.split('/');
+    var first = (parts[1] || '').toLowerCase();
+    for (var i = 0; i < projects.length; i++) {
+      if (projects[i].toLowerCase() === first && projects[i] !== parts[1]) {
+        parts[1] = projects[i];
+        location.replace(parts.join('/') + location.search + location.hash);
+        return;
+      }
+    }
+  })();
+</script>
+</body>
+</html>
