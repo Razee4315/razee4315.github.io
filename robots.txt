@@ -7,3 +7,4 @@ Sitemap: https://razee4315.github.io/snipflag/sitemap.xml
 Sitemap: https://razee4315.github.io/Paperling/sitemap.xml
 Sitemap: https://razee4315.github.io/Vuoom/sitemap-index.xml
 Sitemap: https://razee4315.github.io/coldframe/sitemap.xml
+Sitemap: https://razee4315.github.io/Paperwren/sitemap-index.xml

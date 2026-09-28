@@ -20,12 +20,12 @@
 <main>
   <h1>Page not found</h1>
   <p id="hint">This page doesn't exist. Project addresses are case-sensitive.</p>
-  <p><a href="https://razee4315.github.io/snipflag/">Snipflag</a> · <a href="https://razee4315.github.io/Paperling/">Paperling</a> · <a href="https://razee4315.github.io/Vuoom/">Vuoom</a> · <a href="https://razee4315.github.io/coldframe/">coldframe</a> · <a href="https://razee4315.github.io/">All projects</a></p>
+  <p><a href="https://razee4315.github.io/snipflag/">Snipflag</a> · <a href="https://razee4315.github.io/Paperling/">Paperling</a> · <a href="https://razee4315.github.io/Paperwren/">Paperwren</a> · <a href="https://razee4315.github.io/Vuoom/">Vuoom</a> · <a href="https://razee4315.github.io/coldframe/">coldframe</a> · <a href="https://razee4315.github.io/">All projects</a></p>
 </main>
 <script>
   // Send visitors who typed the wrong capitalization (e.g. /paperling/) to the real project.
   (function () {
-    var projects = ['snipflag', 'Paperling', 'Vuoom', 'coldframe'];
+    var projects = ['snipflag', 'Paperling', 'Paperwren', 'Vuoom', 'coldframe'];
     var parts = location.pathname.split('/');
     var first = (parts[1] || '').toLowerCase();
     for (var i = 0; i < projects.length; i++) {
