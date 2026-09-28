@@ -4,24 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Page not found · Saqlain Razee</title>
+<meta name="description" content="This page doesn't exist. The five tools are one click away.">
 <meta name="robots" content="noindex">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-<style>
-  :root { --bg: #F6F4EE; --text: #1B2420; --muted: #5C6863; --accent: #0F6B62; color-scheme: light dark; }
-  @media (prefers-color-scheme: dark) { :root { --bg: #0F1715; --text: #EAF0EC; --muted: #9DAEA7; --accent: #8CDCC1; } }
-  body { margin: 0; background: var(--bg); color: var(--text); font: 17px/1.6 "Segoe UI", system-ui, -apple-system, sans-serif; }
-  main { width: min(100% - 32px, 640px); margin: 0 auto; padding: 72px 0; }
-  h1 { margin: 0; font-size: 2rem; }
-  p { color: var(--muted); }
-  a { color: var(--accent); font-weight: 600; }
-</style>
-</head>
-<body>
-<main>
-  <h1>Page not found</h1>
-  <p id="hint">This page doesn't exist. Project addresses are case-sensitive.</p>
-  <p><a href="https://razee4315.github.io/snipflag/">Snipflag</a> · <a href="https://razee4315.github.io/Paperling/">Paperling</a> · <a href="https://razee4315.github.io/Paperwren/">Paperwren</a> · <a href="https://razee4315.github.io/Vuoom/">Vuoom</a> · <a href="https://razee4315.github.io/coldframe/">coldframe</a> · <a href="https://razee4315.github.io/">All projects</a></p>
-</main>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100,400;125,800&family=JetBrains+Mono:wght@500&display=swap">
 <script>
   // Send visitors who typed the wrong capitalization (e.g. /paperling/) to the real project.
   (function () {
@@ -37,5 +25,62 @@
     }
   })();
 </script>
+<style>
+  :root { --paper: #EEEBE3; --ink: #141414; --stone: #6B6860; --rule: rgba(20,20,20,.14); --ease-out: cubic-bezier(0.16, 1, 0.3, 1); }
+  * { box-sizing: border-box; }
+  body { margin: 0; min-height: 100dvh; display: grid; place-items: center; background: var(--paper); color: var(--ink); font: 400 16px/1.55 "Archivo", system-ui, sans-serif; }
+  main { width: min(100% - 32px, 760px); padding: 48px 0; display: grid; grid-template-columns: 1fr 220px; gap: 32px; align-items: center; }
+  .code { font: 500 12px "JetBrains Mono", monospace; letter-spacing: .08em; text-transform: uppercase; color: var(--stone); }
+  h1 { margin: 14px 0 0; font-size: clamp(2.6rem, 8vw, 4.6rem); font-weight: 800; font-stretch: 125%; font-variation-settings: "wdth" 125; line-height: .92; letter-spacing: -0.035em; }
+  p { margin: 18px 0 0; color: var(--stone); max-width: 30rem; }
+  nav { margin-top: 26px; display: flex; flex-wrap: wrap; gap: 10px 22px; font: 500 12px "JetBrains Mono", monospace; letter-spacing: .08em; text-transform: uppercase; }
+  nav a { color: var(--ink); text-decoration: none; position: relative; }
+  nav a::after { content: ""; position: absolute; left: 0; right: 0; bottom: -3px; height: 1.5px; background: currentColor; transform: scaleX(0); transform-origin: right; transition: transform 320ms var(--ease-out); }
+  nav a:hover::after, nav a:focus-visible::after { transform: scaleX(1); transform-origin: left; }
+  :focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+  svg { width: 100%; height: auto; overflow: visible; }
+  .eye { transform-box: fill-box; transform-origin: center; animation: blink 4.2s infinite; }
+  .head { transform-box: view-box; transform-origin: 322px 214px; animation: tilt 5s var(--ease-out) infinite; }
+  .bub { transform-box: fill-box; transform-origin: 0% 100%; animation: pop 5s var(--ease-out) infinite; }
+  @keyframes blink { 0%, 92%, 100% { transform: scaleY(1); } 95% { transform: scaleY(.1); } }
+  @keyframes tilt { 0%, 40%, 100% { transform: rotate(0); } 50%, 80% { transform: rotate(-14deg); } }
+  @keyframes pop { 0%, 44% { transform: scale(0); opacity: 0; } 54%, 88% { transform: scale(1); opacity: 1; } 100% { transform: scale(1) translateY(-10px); opacity: 0; } }
+  @media (max-width: 600px) { main { grid-template-columns: 1fr; } svg { max-width: 180px; } }
+  @media (prefers-reduced-motion: reduce) { .eye, .head { animation: none; } .bub { animation: none; transform: none; opacity: 1; } }
+</style>
+</head>
+<body>
+<main>
+  <div>
+    <p class="code">Error 404</p>
+    <h1>This branch is empty.</h1>
+    <p>The page doesn't exist, or it moved. Addresses here are case-sensitive, so /Paperling/ works and /paperling/ doesn't.</p>
+    <nav aria-label="Projects"><a href="/snipflag/">Snipflag</a><a href="/Paperling/">Paperling</a><a href="/Paperwren/">Paperwren</a><a href="/Vuoom/">Vuoom</a><a href="/coldframe/">coldframe</a><a href="/">All projects</a></nav>
+  </div>
+  <svg viewBox="80 40 460 470" aria-hidden="true">
+    <path d="M60 470C170 452 300 440 540 452" stroke="#2E2620" stroke-width="22" stroke-linecap="round" fill="none" transform="translate(0 3)"/>
+    <path d="M60 470C170 452 300 440 540 452" stroke="#4A3F35" stroke-width="20" stroke-linecap="round" fill="none"/>
+    <g transform="translate(470 452) rotate(-40)"><path d="M0 0C8-9 24-10 36 0C24 10 8 9 0 0Z" fill="#7F9464"/></g>
+    <g transform="translate(496 452) rotate(-80) scale(1.2)"><path d="M0 0C8-9 24-10 36 0C24 10 8 9 0 0Z" fill="#3F5A45"/></g>
+    <g transform="translate(46 60)">
+      <path d="M229 226.3L151.2 129.6Q141.5 117.8 129.6 125.3L118.8 134Q108 142.6 115.6 154.5L188.5 258.7Z" fill="#174A44"/>
+      <path d="M239.8 364L231.7 396.4M272.2 364L277.6 396.4" stroke="#174A44" stroke-width="11.9" stroke-linecap="round" fill="none"/>
+      <path d="M355.9 180.4C342.4 145.3 293.8 137.2 272.2 169.6C258.7 191.2 239.8 210.1 212.8 220.9C166.9 239.8 153.4 283 166.9 318.1C183.1 355.9 220.9 374.8 261.4 372.1C320.8 369.4 361.3 323.5 361.3 261.4C361.3 237.1 366.7 218.2 372.1 207.4Z" fill="#F6EFE4"/>
+      <path d="M367.2 212.8C361.8 229 361.3 245.2 361.3 261.4C361.3 323.5 320.8 366.7 261.4 372.1C296.5 350.5 318.1 318.1 325.1 280.3C331.6 247.9 345.1 223.6 367.2 212.8Z" fill="#FFFFFF"/>
+      <path d="M326.2 261.4C304.6 226.3 239.8 223.6 196.6 258.7L161.5 283C207.4 323.5 288.4 323.5 326.2 261.4Z" fill="#174A44"/>
+      <g class="head">
+        <path d="M360.8 180.4Q385.6 186.9 404.5 199.8Q382.9 205.2 366.2 209.6Z" fill="#EC8A5A"/>
+        <g class="eye"><circle cx="326.2" cy="183.1" r="11.3" fill="#174A44"/><circle cx="330.6" cy="178.6" r="3.8" fill="#fff"/></g>
+      </g>
+      <g class="bub">
+        <rect x="380" y="60" width="96" height="84" rx="28" fill="#FBFAF6" stroke="#141414" stroke-width="5"/>
+        <path d="M398 142 L386 176 L420 142" fill="#FBFAF6" stroke="#141414" stroke-width="5" stroke-linejoin="round"/>
+        <rect x="396" y="136" width="26" height="8" fill="#FBFAF6"/>
+        <path d="M415 90a13 13 0 1 1 19.6 11c-4.3 2.7-6.6 5.3-6.6 10.3" stroke="#246C60" stroke-width="9" stroke-linecap="round" fill="none"/>
+        <circle cx="428" cy="127" r="5.6" fill="#246C60"/>
+      </g>
+    </g>
+  </svg>
+</main>
 </body>
 </html>
