@@ -156,17 +156,16 @@
       return { g: g, hole: { x: hx, y: ry + 62 } };
     })();
 
-    // Grass and small flowers at the foot of the trunk.
-    var ground = el('g', {}, world), gd = '';
-    for (var gx = 560; gx <= 1040; gx += 7 + rng() * 6) { var h = 14 + rng() * 38 * (1 - Math.abs(gx - 800) / 300), lean = (rng() - .5) * 26; gd += 'M' + f1(gx) + ' 904Q' + f1(gx + lean * .4) + ' ' + f1(904 - h * .6) + ' ' + f1(gx + lean) + ' ' + f1(904 - h); }
-    el('path', { d: gd, fill: 'none', stroke: '#5E7A56', 'stroke-width': 3, 'stroke-linecap': 'round' }, ground);
-    var fd = '', fc = '';
-    [[640, 878], [712, 884], [900, 880], [966, 872]].forEach(function (q) {
-      el('path', { d: 'M' + q[0] + ' 904V' + q[1], stroke: '#3F5A45', 'stroke-width': 2.2 }, ground);
-      for (var i = 0; i < 5; i++) { var a = i * Math.PI * 2 / 5, cx = q[0] + Math.cos(a) * 4.5, cy = q[1] + Math.sin(a) * 4.5; fd += 'M' + f1(cx - 4) + ' ' + f1(cy) + 'a4 4 0 1 0 8 0a4 4 0 1 0 -8 0Z'; }
-      fc += 'M' + (q[0] - 2.6) + ' ' + q[1] + 'a2.6 2.6 0 1 0 5.2 0a2.6 2.6 0 1 0 -5.2 0Z';
-    });
-    el('path', { d: fd, fill: '#F6EFE4' }, ground); el('path', { d: fc, fill: '#FF9F43' }, ground);
+    // Full-width grass stays at the hero baseline independently of the tree aspect ratio.
+    // Three merged paths keep hundreds of blades inexpensive; drawn only once.
+    var ground = svg.parentNode.querySelector('[data-ground]'), grass = ['', '', ''];
+    if (ground) {
+      for (var gx = -6; gx <= 1606; gx += 3) {
+        var h = 12 + rng() * 46, lean = (rng() - .5) * 24, ci = Math.floor(rng() * 3);
+        grass[ci] += 'M' + f1(gx) + ' 82Q' + f1(gx + lean * .25) + ' ' + f1(82 - h * .7) + ' ' + f1(gx + lean) + ' ' + f1(82 - h);
+      }
+      grass.forEach(function (d, i) { el('path', { d: d, fill: 'none', stroke: ['#8FA372', '#7F9464', '#5E7A56'][i], 'stroke-width': 2, 'stroke-linecap': 'round' }, ground); });
+    }
 
     function client(node, x, y) { var m = node.getScreenCTM(); return m ? { x: m.a * x + m.c * y + m.e, y: m.b * x + m.d * y + m.f } : null; }
     function swing(g, deg, ms) {
@@ -584,7 +583,7 @@
 
     /* ---------- spawning ---------- */
     function spawnAt(cx, cy) {
-      ensureAudio(); measureView();
+      if (soundOn) ensureAudio(); measureView();
       var p = toSky(cx, cy);
       if (birds.length >= MAX) {
         // All ten are out: the nearest perched bird comes over to where you clicked.

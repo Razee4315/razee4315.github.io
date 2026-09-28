@@ -10,29 +10,23 @@
   var hasGsap = !!(window.gsap && window.ScrollTrigger && window.SplitText);
 
   /* ================= the tree and the flock ================= */
-  var sceneArt = $('.scene-art'), countEl = $('[data-count]'), label = $('[data-invite-label]'), live = $('[data-live]'),
-      inviteBtn = $('[data-invite]'), soundBtn = $('[data-sound]'), birdsLine = $('[data-birds-line]');
-  var navCount = $('[data-nav-count]'), navBirds = $('[data-nav-birds]');
-  function poke(row) { row.classList.remove('poke'); void row.offsetWidth; row.classList.add('poke'); setTimeout(function () { row.classList.remove('poke'); }, 850); }
+  var sceneArt = $('.scene-art'), label = $('[data-invite-label]'), live = $('[data-live]'), inviteBtn = $('[data-invite]');
   var sceneSvg = $('.scene-svg'), compactScene = window.matchMedia('(max-width: 960px)');
   // Reframe the existing drawing at the breakpoint; never rebuild its paths or perches.
-  function frameTree() { sceneSvg.setAttribute('viewBox', compactScene.matches ? '200 80 1200 860' : '0 0 1600 940'); }
+  function frameTree() { sceneSvg.setAttribute('viewBox', compactScene.matches ? '200 80 1200 826' : '0 80 1600 826'); }
   frameTree();
   compactScene.addEventListener('change', frameTree);
   var tree = window.Birds ? Birds.tree(sceneSvg) : null;
   var flock = window.Birds ? Birds.flock({
     sky: $('[data-sky]'), tree: tree,
     onChange: function (n, max) {
-      countEl.textContent = n + '/' + max;
-      navCount.textContent = n + '/' + max; if (n >= max) navBirds.setAttribute('aria-disabled', 'true');
-      birdsLine.textContent = n >= max ? 'Ten birds on this page · the flock is complete' : (n === 1 ? 'One bird' : n + ' birds') + ' on this page · click anywhere to add one';
       live.textContent = n >= max ? 'Ten birds. The flock is complete.' : (n === 1 ? 'One bird is out.' : n + ' birds are out.');
       if (n >= max) { inviteBtn.setAttribute('aria-disabled', 'true'); label.textContent = 'The flock is full'; }
-    },
-    onLand: function (sp) { var row = sp.el && sp.el.closest ? sp.el.closest('.band') : null; if (row) poke(row); }
+    }
   }) : null;
 
   if (flock) {
+    flock.setSound(false);
     // Grow the tree, then the first wren is already sitting on it.
     requestAnimationFrame(function () {
       sceneArt.classList.add('grown');
@@ -41,21 +35,11 @@
     setTimeout(function () { flock.spawnOnTree(5); }, reduce ? 0 : 650);
 
     inviteBtn.addEventListener('click', function () { flock.spawnFromHouse(); });
-    navBirds.addEventListener('click', function () { var r = navBirds.getBoundingClientRect(); flock.spawnAt(r.left + r.width / 2, r.bottom + 30); });
     document.addEventListener('click', function (e) {
       var t = e.target; if (e.button !== 0 || !t || !t.closest || t.closest('a, button, input, textarea, select, label, [data-no-bird]')) return;
       var sel = window.getSelection && String(window.getSelection()); if (sel) return;
       flock.spawnAt(e.clientX, e.clientY);
     });
-    soundBtn.addEventListener('click', function () {
-      var on = !flock.soundOn(); flock.setSound(on);
-      soundBtn.setAttribute('aria-pressed', String(on)); soundBtn.setAttribute('aria-label', on ? 'Bird sounds on' : 'Bird sounds off');
-    });
-  }
-
-  /* ================= catalogue: logos only animate while the section is on screen ================= */
-  if ('IntersectionObserver' in window) {
-    new IntersectionObserver(function (e) { e[0].target.classList.toggle('in-view', e[0].isIntersecting); }).observe($('[data-catalogue]'));
   }
 
   /* ================= nav: hide going down, show going up; mark the project on screen ================= */
@@ -77,34 +61,6 @@
     $$('.band').forEach(function (b) { bandIO.observe(b); });
     new IntersectionObserver(function (e) { if (e[0].isIntersecting) navLinks.forEach(function (a) { a.setAttribute('aria-current', 'false'); }); }, { rootMargin: '-45% 0px -50% 0px' }).observe($('.hero'));
   }
-
-  /* ================= footer ================= */
-  var mark = $('[data-wordmark]'), colors = ['#FFB25B', '#FF8C00', '#5FB3A6', '#E5484D', '#7FD6EE'], revealed = !hasGsap || reduce;
-  var letters = mark.textContent.split('');
-  mark.textContent = '';
-  var chars = letters.map(function (ch, i) {
-    var s = document.createElement('span'); s.className = 'ch'; s.textContent = ch; s.setAttribute('aria-hidden', 'true');
-    s.style.setProperty('--c', colors[i % colors.length]); mark.appendChild(s); return s;
-  });
-  if (!reduce) {
-    mark.addEventListener('pointermove', function (e) {
-      if (!revealed) return;
-      chars.forEach(function (c) {
-        var r = c.getBoundingClientRect(), d = Math.abs(e.clientX - (r.left + r.width / 2)), k = Math.max(0, 1 - d / (r.width * 1.25));
-        c.style.transform = k ? 'translateY(' + (-k * 12).toFixed(1) + '%) scale(' + (1 - k * .06).toFixed(3) + ',' + (1 + k * .14).toFixed(3) + ')' : '';
-        c.classList.toggle('lit', k > .55);
-      });
-    });
-    mark.addEventListener('pointerleave', function () { chars.forEach(function (c) { c.style.transform = ''; c.classList.remove('lit'); }); });
-    chars.forEach(function (c) {
-      c.addEventListener('click', function () { c.classList.remove('jelly'); void c.offsetWidth; c.classList.add('jelly'); });
-      c.addEventListener('animationend', function () { c.classList.remove('jelly'); });
-    });
-  }
-  $('[data-top]').addEventListener('click', function () {
-    if (flock) flock.scatter();
-    if (window.__lenis) window.__lenis.scrollTo(0, { duration: 1.6 }); else window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
-  });
 
   /* ================= scroll choreography (GSAP) ================= */
   if (!hasGsap) return;
@@ -144,20 +100,10 @@
         .fromTo('.lede', { autoAlpha: 0, y: 16 }, { autoAlpha: 1, y: 0 }, .4)
         .fromTo('.actions', { autoAlpha: 0, scale: .95, transformOrigin: '0% 50%' }, { autoAlpha: 1, scale: 1, duration: .8 }, .55);
 
-      gsap.to('.hero-type', { yPercent: -14, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 1 } });
-      gsap.to('.scene-art', { yPercent: -8, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 1 } });
-
-      var words = SplitText.create('[data-words]', { type: 'words' });
-      gsap.timeline({ scrollTrigger: { trigger: '.colophon', start: 'top top', end: '+=140%', pin: true, scrub: 1 } })
-        .fromTo(words.words, { opacity: .12 }, { opacity: 1, stagger: .1, ease: 'none', duration: 1 });
-
-      gsap.from(chars, { yPercent: 70, autoAlpha: 0, stagger: .07, duration: 1, scrollTrigger: { trigger: mark, start: 'top 95%', once: true },
-        onComplete: function () { gsap.set(chars, { clearProps: 'transform,opacity,visibility' }); revealed = true; } });
-
       ScrollTrigger.refresh();
-      return function () { split.revert(); words.revert(); };
+      return function () { split.revert(); };
     });
   });
-  mm.add('(prefers-reduced-motion: reduce)', function () { gsap.set('[data-hero-fade], .band-copy, .band-shot', { autoAlpha: 1, y: 0 }); revealed = true; });
+  mm.add('(prefers-reduced-motion: reduce)', function () { gsap.set('[data-hero-fade], .band-copy, .band-shot', { autoAlpha: 1, y: 0 }); });
   window.addEventListener('load', function () { ScrollTrigger.refresh(); });
 })();
