@@ -12,18 +12,19 @@
   /* ================= the tree and the flock ================= */
   var sceneArt = $('.scene-art'), countEl = $('[data-count]'), label = $('[data-invite-label]'), live = $('[data-live]'),
       inviteBtn = $('[data-invite]'), soundBtn = $('[data-sound]'), birdsLine = $('[data-birds-line]');
-  var rows = $$('[data-row]');
+  var navCount = $('[data-nav-count]'), navBirds = $('[data-nav-birds]');
   function poke(row) { row.classList.remove('poke'); void row.offsetWidth; row.classList.add('poke'); setTimeout(function () { row.classList.remove('poke'); }, 850); }
   var tree = window.Birds ? Birds.tree($('.scene-svg')) : null;
   var flock = window.Birds ? Birds.flock({
     sky: $('[data-sky]'), tree: tree,
     onChange: function (n, max) {
       countEl.textContent = n + '/' + max;
+      navCount.textContent = n + '/' + max; if (n >= max) navBirds.setAttribute('aria-disabled', 'true');
       birdsLine.textContent = n >= max ? 'Ten birds on this page · the flock is complete' : (n === 1 ? 'One bird' : n + ' birds') + ' on this page · click anywhere to add one';
       live.textContent = n >= max ? 'Ten birds. The flock is complete.' : (n === 1 ? 'One bird is out.' : n + ' birds are out.');
       if (n >= max) { inviteBtn.setAttribute('aria-disabled', 'true'); label.textContent = 'The flock is full'; }
     },
-    onLand: function (sp) { var row = sp.el && sp.el.closest ? sp.el.closest('.row') : null; if (row) poke(row); }
+    onLand: function (sp) { var row = sp.el && sp.el.closest ? sp.el.closest('.band') : null; if (row) poke(row); }
   }) : null;
 
   if (flock) {
@@ -35,8 +36,9 @@
     setTimeout(function () { flock.spawnOnTree(5); }, reduce ? 0 : 650);
 
     inviteBtn.addEventListener('click', function () { flock.spawnFromHouse(); });
+    navBirds.addEventListener('click', function () { var r = navBirds.getBoundingClientRect(); flock.spawnAt(r.left + r.width / 2, r.bottom + 30); });
     document.addEventListener('click', function (e) {
-      if (e.button !== 0 || e.target.closest('a, button, input, textarea, select, label, [data-no-bird]')) return;
+      var t = e.target; if (e.button !== 0 || !t || !t.closest || t.closest('a, button, input, textarea, select, label, [data-no-bird]')) return;
       var sel = window.getSelection && String(window.getSelection()); if (sel) return;
       flock.spawnAt(e.clientX, e.clientY);
     });
@@ -46,36 +48,29 @@
     });
   }
 
-  /* ================= catalogue ================= */
-  var indexEl = $('[data-index]'), refreshT = 0;
-  function setIndex(i) { indexEl.textContent = String(i + 1).padStart(2, '0'); }
-  function refreshSoon() { clearTimeout(refreshT); refreshT = setTimeout(function () { if (window.ScrollTrigger) ScrollTrigger.refresh(); }, 750); }
-  function syncLinks(row) { var v = $('.visit', row); if (v) v.tabIndex = row.classList.contains('is-open') ? 0 : -1; }
-  function openRow(row) {
-    rows.forEach(function (r) { if (r !== row && r.classList.contains('is-open')) { r.classList.remove('is-open'); syncLinks(r); } });
-    if (!row.classList.contains('is-open')) {
-      row.classList.add('is-open', 'opened'); setTimeout(function () { row.classList.remove('opened'); }, 850);
-      syncLinks(row); setIndex(rows.indexOf(row)); refreshSoon();
-    }
-  }
-  if (fine) {
-    // Desktop: a row opens when you rest on it and stays open until you rest on another one (no jumping list).
-    rows.forEach(function (row) {
-      var head = $('.row-head', row), t = 0;
-      head.addEventListener('pointerenter', function () { t = setTimeout(function () { openRow(row); }, 110); });
-      head.addEventListener('pointerleave', function () { clearTimeout(t); });
-      row.addEventListener('focusin', function () { openRow(row); });
-    });
-    openRow(rows[0]);
-  } else {
-    // Touch: every project is a full colour card, nothing to hover.
-    rows.forEach(function (row) { row.classList.add('is-open'); syncLinks(row); });
-  }
+  /* ================= catalogue: logos only animate while the section is on screen ================= */
   if ('IntersectionObserver' in window) {
     new IntersectionObserver(function (e) { e[0].target.classList.toggle('in-view', e[0].isIntersecting); }).observe($('[data-catalogue]'));
-    if (!fine) rows.forEach(function (row, i) {
-      new IntersectionObserver(function (e) { if (e[0].isIntersecting) setIndex(i); }, { rootMargin: '-45% 0px -45% 0px' }).observe(row);
-    });
+  }
+
+  /* ================= nav: hide going down, show going up; mark the project on screen ================= */
+  var nav = $('[data-nav]'), lastY = window.scrollY;
+  function onScroll(y) {
+    if (y > lastY + 6 && y > 160) nav.classList.add('hide'); else if (y < lastY - 6 || y < 160) nav.classList.remove('hide');
+    lastY = y;
+  }
+  window.addEventListener('scroll', function () { onScroll(window.scrollY); }, { passive: true });
+  nav.addEventListener('focusin', function () { nav.classList.remove('hide'); });
+  var navLinks = $$('[data-nav-link]');
+  if ('IntersectionObserver' in window) {
+    var bandIO = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        navLinks.forEach(function (a) { a.setAttribute('aria-current', a.getAttribute('href') === '#' + e.target.id ? 'true' : 'false'); });
+      });
+    }, { rootMargin: '-45% 0px -50% 0px' });
+    $$('.band').forEach(function (b) { bandIO.observe(b); });
+    new IntersectionObserver(function (e) { if (e[0].isIntersecting) navLinks.forEach(function (a) { a.setAttribute('aria-current', 'false'); }); }, { rootMargin: '-45% 0px -50% 0px' }).observe($('.hero'));
   }
 
   /* ================= footer ================= */
@@ -130,15 +125,15 @@
 
   var mm = gsap.matchMedia();
   mm.add('(prefers-reduced-motion: no-preference)', function () {
-    gsap.set('.row', { autoAlpha: 0, y: 40 });
-    ScrollTrigger.batch('.row', { start: 'top 92%', once: true, onEnter: function (els) { gsap.to(els, { autoAlpha: 1, y: 0, stagger: .08, duration: .9, overwrite: true }); } });
+    gsap.set('.band-copy, .band-shot', { autoAlpha: 0, y: 40 });
+    ScrollTrigger.batch('.band-copy, .band-shot', { start: 'top 88%', once: true, onEnter: function (els) { gsap.to(els, { autoAlpha: 1, y: 0, stagger: .12, duration: 1, overwrite: true }); } });
 
     document.fonts.ready.then(function () {
       var h1 = $('[data-split]');
       h1.setAttribute('aria-label', h1.textContent.replace(/\s+/g, ' ').trim());
       var split = SplitText.create(h1, { type: 'lines', mask: 'lines', autoSplit: true, onSplit: function (self) { self.lines.forEach(function (l) { l.setAttribute('aria-hidden', 'true'); }); } });
       gsap.timeline()
-        .fromTo('.strip', { autoAlpha: 0, y: -8 }, { autoAlpha: 1, y: 0, duration: .8 }, 0)
+        .fromTo('.nav', { autoAlpha: 0 }, { autoAlpha: 1, duration: .8, ease: 'power2.out' }, 0)
         .from(split.lines, { yPercent: 110, duration: 1, stagger: .1 }, .1)
         .fromTo('.lede', { autoAlpha: 0, y: 16 }, { autoAlpha: 1, y: 0 }, .4)
         .fromTo('.actions', { autoAlpha: 0, scale: .95, transformOrigin: '0% 50%' }, { autoAlpha: 1, scale: 1, duration: .8 }, .55);
@@ -157,6 +152,6 @@
       return function () { split.revert(); words.revert(); };
     });
   });
-  mm.add('(prefers-reduced-motion: reduce)', function () { gsap.set('[data-hero-fade], .row', { autoAlpha: 1, y: 0 }); revealed = true; });
+  mm.add('(prefers-reduced-motion: reduce)', function () { gsap.set('[data-hero-fade], .band-copy, .band-shot', { autoAlpha: 1, y: 0 }); revealed = true; });
   window.addEventListener('load', function () { ScrollTrigger.refresh(); });
 })();

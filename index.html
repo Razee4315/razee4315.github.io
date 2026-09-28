@@ -21,8 +21,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100,400;125,800&family=JetBrains+Mono:wght@500&display=swap">
-<link rel="stylesheet" href="assets/site.css?v=7">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=JetBrains+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="assets/site.css?v=13">
 <script>
   (function () {
     var r = document.documentElement;
@@ -50,11 +50,28 @@
 <body>
 <a class="skip" href="#catalogue">Skip to the tools</a>
 
+<header class="nav" data-nav>
+  <a class="nav-brand" href="#top" aria-label="Saqlain Razee, back to top">
+    <svg viewBox="0 0 64 64" aria-hidden="true"><path d="M27 27.5 12.6 9.6Q10.8 7.4 8.6 8.8L6.6 10.4Q4.6 12 6 14.2L19.5 33.5Z" fill="#174A44"/><path d="M29 53 27.5 59M35 53l1 6" stroke="#174A44" stroke-width="2.4" stroke-linecap="round"/><path d="M50.5 19C48 12.5 39 11 35 17 32.5 21 29 24.5 24 26.5 15.5 30 13 38 15.5 44.5 18.5 51.5 25.5 55 33 54.5 44 54 51.5 45.5 51.5 34 51.5 29.5 52.5 26 53.5 24Z" fill="#2B6E66"/><path d="M52.6 25C51.6 28 51.5 31 51.5 34 51.5 45.5 44 53.5 33 54.5 39.5 50.5 43.5 44.5 44.8 37.5 46 31.5 48.5 27 52.6 25Z" fill="#8FBCB3"/><path d="M45 34C41 27.5 29 27 21 33.5L14.5 38C23 45.5 38 45.5 45 34Z" fill="#174A44"/><path d="M51.4 19Q56 20.2 59.5 22.6 55.5 23.6 52.4 24.4Z" fill="#EC8A5A"/><circle cx="45" cy="19.5" r="2.1" fill="#0E2B27"/></svg>
+    <span>Saqlain Razee</span>
+  </a>
+  <nav class="nav-links mono" aria-label="Projects">
+    <a href="#snipflag" data-nav-link>Snipflag</a>
+    <a href="#paperling" data-nav-link>Paperling</a>
+    <a href="#paperwren" data-nav-link>Paperwren</a>
+    <a href="#vuoom" data-nav-link>Vuoom</a>
+    <a href="#coldframe" data-nav-link>coldframe</a>
+  </nav>
+  <div class="nav-end">
+    <button class="nav-birds mono" type="button" data-nav-birds aria-label="Release a bird"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 15c3-.6 5.2-3.2 7.4-4.4 3.4-1.8 6.3-.4 8.1-2.2l2 1.1-1.9 1.6c0 4.2-3.2 7.4-8 7.4-3.4 0-6-1.2-7.6-3.5z" fill="currentColor"/></svg><span data-nav-count>0/10</span></button>
+    <a class="nav-gh" href="https://github.com/Razee4315" aria-label="GitHub"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.1-1.47-1.1-1.47-.9-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.08.63-1.33-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02a9.6 9.6 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2.2z" fill="currentColor"/></svg></a>
+  </div>
+</header>
+
 <main>
   <!-- ============ HERO ============ -->
-  <section class="hero" aria-labelledby="hero-title">
-    <p class="strip mono" data-hero-fade><span>Saqlain Razee — independent software</span><span>Catalogue 2026 · 05 items</span></p>
-    <div class="hero-type">
+  <section class="hero" id="top" aria-labelledby="hero-title">
+        <div class="hero-type">
       <h1 id="hero-title" class="h1" data-split data-perch="text">Five free tools.<br>One small tree.</h1>
       <p class="lede" data-hero-fade>I'm Saqlain. I make small, open-source apps for everyday annoyances. Pick one below, or click anywhere to set a bird loose.</p>
       <div class="actions" data-hero-fade>
@@ -65,7 +82,7 @@
 
     <figure class="scene" data-scene>
       <div class="scene-art">
-        <svg class="scene-svg" viewBox="90 150 940 874" preserveAspectRatio="xMaxYMax meet" role="img" aria-labelledby="scene-title">
+        <svg class="scene-svg" viewBox="90 150 940 874" preserveAspectRatio="xMidYMid meet" role="img" aria-labelledby="scene-title">
           <title id="scene-title">A small tree with a hanging birdhouse. Birds you invite fly around the page.</title>
           <g data-world></g>
         </svg>
@@ -84,93 +101,68 @@
   <section class="catalogue" id="catalogue" aria-labelledby="cat-title" data-catalogue>
     <div class="cat-head">
       <h2 id="cat-title" class="label mono">The catalogue</h2>
-      <p class="index mono" aria-hidden="true"><span data-index>01</span><span class="of">/05</span></p>
+      <p class="label mono">Five free tools · all open source</p>
     </div>
-    <ol class="rows">
-      <li class="row" data-row style="--bg:#0C1F1B;--fg:#EEF2EE;--hi:#FFB25B">
-        <a class="row-head" href="https://razee4315.github.io/snipflag/" data-perch="edge">
-          <span class="code mono">SF—01</span>
-          <span class="name" data-perch="text">Snipflag</span>
-          <span class="tag mono">Linear bug reports</span>
-          <span class="logo logo-sf" aria-hidden="true"><svg viewBox="0 0 512 512"><g class="tile"><rect width="512" height="512" rx="112" fill="#0A0A0A"/><g fill="none" stroke="#FFF" stroke-width="34" stroke-linecap="round" stroke-linejoin="round"><path class="c tl" d="M204 135h-69v69"/><path class="c br" d="M308 377h69v-69"/><path class="c bl" d="M135 308v69h69"/><path class="arr" d="M235 277l139-139m-89 0h89v89"/></g></g></svg></span>
-          <span class="go" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span>
-        </a>
-        <div class="row-panel"><div class="panel-inner">
-          <img class="shot" src="assets/img/snipflag.webp" width="960" height="504" loading="lazy" decoding="async" alt="Snipflag: turn screenshots into Linear issues">
-          <div class="panel-copy">
+    <ol class="bands">
+      <li class="band" id="snipflag" data-row style="--bg:#0C1F1B;--fg:#EEF2EE;--hi:#FFB25B">
+        <div class="band-inner">
+          <div class="band-copy">
+            <p class="band-meta mono"><span class="code">SF—01</span><span>Linear bug reports</span><span class="n">01/05</span></p>
+            <div class="band-title"><span class="logo logo-sf" aria-hidden="true"><svg viewBox="0 0 512 512"><g class="tile"><rect width="512" height="512" rx="112" fill="#0A0A0A"/><g fill="none" stroke="#FFF" stroke-width="34" stroke-linecap="round" stroke-linejoin="round"><path class="c tl" d="M204 135h-69v69"/><path class="c br" d="M308 377h69v-69"/><path class="c bl" d="M135 308v69h69"/><path class="arr" d="M235 277l139-139m-89 0h89v89"/></g></g></svg></span><h3 class="name" data-perch="text"><a href="https://razee4315.github.io/snipflag/">Snipflag</a></h3></div>
             <p class="what">Turn screenshots into Linear issues. Snip anything on screen, mark it up, pixelate private bits, and send it straight to Linear.</p>
             <p class="spec mono">Windows · macOS · Linux · MIT</p>
-            <a class="visit mono" href="https://razee4315.github.io/snipflag/" tabindex="-1">Visit Snipflag <span aria-hidden="true">→</span></a>
+            <a class="visit mono" href="https://razee4315.github.io/snipflag/" data-perch="edge">Visit Snipflag <span aria-hidden="true">→</span></a>
           </div>
-        </div></div>
+          <div class="band-shot"><img src="assets/img/snipflag.webp" width="960" height="504" loading="lazy" decoding="async" alt="Snipflag: turn screenshots into Linear issues"></div>
+        </div>
       </li>
-      <li class="row" data-row style="--bg:#FF8C00;--fg:#1C1206;--hi:#FFF1D6">
-        <a class="row-head" href="https://razee4315.github.io/Paperling/" data-perch="edge">
-          <span class="code mono">PL—02</span>
-          <span class="name" data-perch="text">Paperling</span>
-          <span class="tag mono">Markdown editor</span>
-          <span class="logo logo-pl" aria-hidden="true"><svg viewBox="-10 -10 148 148" fill="none"><rect class="pad" x="-10" y="-10" width="148" height="148" rx="32" fill="#1C1206"/><g stroke-width="10" stroke-linecap="round" stroke-linejoin="round"><path class="lt" stroke="#FF8C00" d="M44 24 16 64l28 40"/><g class="hash" stroke="#FF8C00"><path d="M48 54h32"/><path d="M48 74h32"/><path d="M58 44v40"/><path d="M70 44v40"/></g><path class="gt" stroke="#00B8D4" d="m84 24 28 40-28 40"/></g></svg></span>
-          <span class="go" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span>
-        </a>
-        <div class="row-panel"><div class="panel-inner">
-          <img class="shot" src="assets/img/paperling.webp" width="960" height="504" loading="lazy" decoding="async" alt="Paperling Markdown editor">
-          <div class="panel-copy">
+      <li class="band" id="paperling" data-row style="--bg:#FF8C00;--fg:#1C1206;--hi:#FFF1D6">
+        <div class="band-inner">
+          <div class="band-copy">
+            <p class="band-meta mono"><span class="code">PL—02</span><span>Markdown editor</span><span class="n">02/05</span></p>
+            <div class="band-title"><span class="logo logo-pl" aria-hidden="true"><svg viewBox="-10 -10 148 148" fill="none"><rect class="pad" x="-10" y="-10" width="148" height="148" rx="32" fill="#1C1206"/><g stroke-width="10" stroke-linecap="round" stroke-linejoin="round"><path class="lt" stroke="#FF8C00" d="M44 24 16 64l28 40"/><g class="hash" stroke="#FF8C00"><path d="M48 54h32"/><path d="M48 74h32"/><path d="M58 44v40"/><path d="M70 44v40"/></g><path class="gt" stroke="#00B8D4" d="m84 24 28 40-28 40"/></g></svg></span><h3 class="name" data-perch="text"><a href="https://razee4315.github.io/Paperling/">Paperling</a></h3></div>
             <p class="what">A calm Markdown editor with live preview, math, diagrams and optional AI. Open a file and start writing.</p>
             <p class="spec mono">Desktop · Android · Apache-2.0</p>
-            <a class="visit mono" href="https://razee4315.github.io/Paperling/" tabindex="-1">Visit Paperling <span aria-hidden="true">→</span></a>
+            <a class="visit mono" href="https://razee4315.github.io/Paperling/" data-perch="edge">Visit Paperling <span aria-hidden="true">→</span></a>
           </div>
-        </div></div>
+          <div class="band-shot"><img src="assets/img/paperling.webp" width="960" height="504" loading="lazy" decoding="async" alt="Paperling Markdown editor"></div>
+        </div>
       </li>
-      <li class="row" data-row style="--bg:#2B6E66;--fg:#F6EFE4;--hi:#EC8A5A">
-        <a class="row-head" href="https://razee4315.github.io/Paperwren/" data-perch="edge">
-          <span class="code mono">PW—03</span>
-          <span class="name" data-perch="text">Paperwren</span>
-          <span class="tag mono">Document viewer</span>
-          <span class="logo logo-pw" aria-hidden="true"><svg viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#2B6E66"/><g class="wren"><path class="tail" d="M229 226.3 151.2 129.6Q141.5 117.8 129.6 125.3L118.8 134Q108 142.6 115.6 154.5L188.5 258.7Z" fill="#174a44"/><path d="M239.8 364 231.7 396.4M272.2 364l5.4 32.4" stroke="#174a44" stroke-width="11.9" stroke-linecap="round" fill="none"/><path d="M355.9 180.4C342.4 145.3 293.8 137.2 272.2 169.6 258.7 191.2 239.8 210.1 212.8 220.9 166.9 239.8 153.4 283 166.9 318.1 183.1 355.9 220.9 374.8 261.4 372.1 320.8 369.4 361.3 323.5 361.3 261.4 361.3 237.1 366.7 218.2 372.1 207.4Z" fill="#f6efe4"/><path d="M367.2 212.8C361.8 229 361.3 245.2 361.3 261.4 361.3 323.5 320.8 366.7 261.4 372.1 296.5 350.5 318.1 318.1 325.1 280.3 331.6 247.9 345.1 223.6 367.2 212.8Z" fill="#fff"/><path class="wing" d="M326.2 261.4C304.6 226.3 239.8 223.6 196.6 258.7L161.5 283C207.4 323.5 288.4 323.5 326.2 261.4Z" fill="#174a44"/><path d="M360.8 180.4Q385.6 186.9 404.5 199.8 382.9 205.2 366.2 209.6Z" fill="#ec8a5a"/><circle class="eye" cx="326.2" cy="183.1" r="11.3" fill="#174a44"/></g></svg></span>
-          <span class="go" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span>
-        </a>
-        <div class="row-panel"><div class="panel-inner">
-          <img class="shot" src="assets/img/paperwren.webp" width="960" height="504" loading="lazy" decoding="async" alt="Paperwren document viewer on a phone">
-          <div class="panel-copy">
+      <li class="band" id="paperwren" data-row style="--bg:#2B6E66;--fg:#F6EFE4;--hi:#EC8A5A">
+        <div class="band-inner">
+          <div class="band-copy">
+            <p class="band-meta mono"><span class="code">PW—03</span><span>Document viewer</span><span class="n">03/05</span></p>
+            <div class="band-title"><span class="logo logo-pw" aria-hidden="true"><svg viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#2B6E66"/><g class="wren"><path class="tail" d="M229 226.3 151.2 129.6Q141.5 117.8 129.6 125.3L118.8 134Q108 142.6 115.6 154.5L188.5 258.7Z" fill="#174a44"/><path d="M239.8 364 231.7 396.4M272.2 364l5.4 32.4" stroke="#174a44" stroke-width="11.9" stroke-linecap="round" fill="none"/><path d="M355.9 180.4C342.4 145.3 293.8 137.2 272.2 169.6 258.7 191.2 239.8 210.1 212.8 220.9 166.9 239.8 153.4 283 166.9 318.1 183.1 355.9 220.9 374.8 261.4 372.1 320.8 369.4 361.3 323.5 361.3 261.4 361.3 237.1 366.7 218.2 372.1 207.4Z" fill="#f6efe4"/><path d="M367.2 212.8C361.8 229 361.3 245.2 361.3 261.4 361.3 323.5 320.8 366.7 261.4 372.1 296.5 350.5 318.1 318.1 325.1 280.3 331.6 247.9 345.1 223.6 367.2 212.8Z" fill="#fff"/><path class="wing" d="M326.2 261.4C304.6 226.3 239.8 223.6 196.6 258.7L161.5 283C207.4 323.5 288.4 323.5 326.2 261.4Z" fill="#174a44"/><path d="M360.8 180.4Q385.6 186.9 404.5 199.8 382.9 205.2 366.2 209.6Z" fill="#ec8a5a"/><circle class="eye" cx="326.2" cy="183.1" r="11.3" fill="#174a44"/></g></svg></span><h3 class="name" data-perch="text"><a href="https://razee4315.github.io/Paperwren/">Paperwren</a></h3></div>
             <p class="what">Open PDF, Word, Excel and PowerPoint in a blink. No account, no ads, no internet access, no permissions.</p>
             <p class="spec mono">Android · Windows · MIT</p>
-            <a class="visit mono" href="https://razee4315.github.io/Paperwren/" tabindex="-1">Visit Paperwren <span aria-hidden="true">→</span></a>
+            <a class="visit mono" href="https://razee4315.github.io/Paperwren/" data-perch="edge">Visit Paperwren <span aria-hidden="true">→</span></a>
           </div>
-        </div></div>
+          <div class="band-shot"><img src="assets/img/paperwren.webp" width="960" height="504" loading="lazy" decoding="async" alt="Paperwren document viewer on a phone"></div>
+        </div>
       </li>
-      <li class="row" data-row style="--bg:#0E0E0E;--fg:#F2F0EB;--hi:#E5484D">
-        <a class="row-head" href="https://razee4315.github.io/Vuoom/" data-perch="edge">
-          <span class="code mono">VM—04</span>
-          <span class="name" data-perch="text">Vuoom</span>
-          <span class="tag mono">Screen recorder</span>
-          <span class="logo logo-vm" aria-hidden="true"><svg viewBox="0 0 1024 1024"><rect width="1024" height="1024" rx="200" fill="#0E0E0E"/><g class="vee"><path d="M305 338 512 722 700 373" fill="none" stroke="#F2F0EB" stroke-width="104" stroke-linecap="round" stroke-linejoin="round"/></g><circle class="rec" cx="719" cy="338" r="100" fill="#E5484D"/></svg></span>
-          <span class="go" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span>
-        </a>
-        <div class="row-panel"><div class="panel-inner">
-          <img class="shot" src="assets/img/vuoom.webp" width="960" height="504" loading="lazy" decoding="async" alt="Vuoom screen recorder">
-          <div class="panel-copy">
+      <li class="band" id="vuoom" data-row style="--bg:#0E0E0E;--fg:#F2F0EB;--hi:#E5484D">
+        <div class="band-inner">
+          <div class="band-copy">
+            <p class="band-meta mono"><span class="code">VM—04</span><span>Screen recorder</span><span class="n">04/05</span></p>
+            <div class="band-title"><span class="logo logo-vm" aria-hidden="true"><svg viewBox="0 0 1024 1024"><rect width="1024" height="1024" rx="200" fill="#0E0E0E"/><g class="vee"><path d="M305 338 512 722 700 373" fill="none" stroke="#F2F0EB" stroke-width="104" stroke-linecap="round" stroke-linejoin="round"/></g><circle class="rec" cx="719" cy="338" r="100" fill="#E5484D"/></svg></span><h3 class="name" data-perch="text"><a href="https://razee4315.github.io/Vuoom/">Vuoom</a></h3></div>
             <p class="what">Record polished demos with automatic zoom, quick edits, offline captions and GIF or MP4 export. No watermark.</p>
             <p class="spec mono">Windows · Apache-2.0</p>
-            <a class="visit mono" href="https://razee4315.github.io/Vuoom/" tabindex="-1">Visit Vuoom <span aria-hidden="true">→</span></a>
+            <a class="visit mono" href="https://razee4315.github.io/Vuoom/" data-perch="edge">Visit Vuoom <span aria-hidden="true">→</span></a>
           </div>
-        </div></div>
+          <div class="band-shot"><img src="assets/img/vuoom.webp" width="960" height="504" loading="lazy" decoding="async" alt="Vuoom screen recorder"></div>
+        </div>
       </li>
-      <li class="row" data-row style="--bg:#1F4FD6;--fg:#FFFFFF;--hi:#7FD6EE">
-        <a class="row-head" href="https://razee4315.github.io/coldframe/" data-perch="edge">
-          <span class="code mono">CF—05</span>
-          <span class="name" data-perch="text">coldframe</span>
-          <span class="tag mono">Cloud video renders</span>
-          <span class="logo logo-cf" aria-hidden="true"><svg viewBox="-5 -5 74 74"><rect class="pad" x="-5" y="-5" width="74" height="74" rx="16" fill="#FFFFFF"/><polygon class="f1" points="11,7 23.8,13.4 23.8,50.6 11,57" fill="#1D5FD0" stroke="#1D5FD0" stroke-width="2.2" stroke-linejoin="round"/><polygon class="f2" points="28,15.5 40.8,21.9 40.8,42.1 28,48.5" fill="#1FA0DC" stroke="#1FA0DC" stroke-width="2.2" stroke-linejoin="round"/><polygon class="f3" points="45,24 57,32 45,40" fill="#7FD6EE" stroke="#7FD6EE" stroke-width="2.2" stroke-linejoin="round"/></svg></span>
-          <span class="go" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span>
-        </a>
-        <div class="row-panel"><div class="panel-inner">
-          <img class="shot" src="assets/img/coldframe.webp" width="960" height="504" loading="lazy" decoding="async" alt="coldframe: render Remotion videos in the cloud">
-          <div class="panel-copy">
+      <li class="band" id="coldframe" data-row style="--bg:#1F4FD6;--fg:#FFFFFF;--hi:#7FD6EE">
+        <div class="band-inner">
+          <div class="band-copy">
+            <p class="band-meta mono"><span class="code">CF—05</span><span>Cloud video renders</span><span class="n">05/05</span></p>
+            <div class="band-title"><span class="logo logo-cf" aria-hidden="true"><svg viewBox="-5 -5 74 74"><rect class="pad" x="-5" y="-5" width="74" height="74" rx="16" fill="#FFFFFF"/><polygon class="f1" points="11,7 23.8,13.4 23.8,50.6 11,57" fill="#1D5FD0" stroke="#1D5FD0" stroke-width="2.2" stroke-linejoin="round"/><polygon class="f2" points="28,15.5 40.8,21.9 40.8,42.1 28,48.5" fill="#1FA0DC" stroke="#1FA0DC" stroke-width="2.2" stroke-linejoin="round"/><polygon class="f3" points="45,24 57,32 45,40" fill="#7FD6EE" stroke="#7FD6EE" stroke-width="2.2" stroke-linejoin="round"/></svg></span><h3 class="name" data-perch="text"><a href="https://razee4315.github.io/coldframe/">coldframe</a></h3></div>
             <p class="what">Render Remotion videos on free GitHub machines instead of your laptop. One setup command, parallel renders, every frame checked.</p>
             <p class="spec mono">GitHub Actions · MIT</p>
-            <a class="visit mono" href="https://razee4315.github.io/coldframe/" tabindex="-1">Visit coldframe <span aria-hidden="true">→</span></a>
+            <a class="visit mono" href="https://razee4315.github.io/coldframe/" data-perch="edge">Visit coldframe <span aria-hidden="true">→</span></a>
           </div>
-        </div></div>
+          <div class="band-shot"><img src="assets/img/coldframe.webp" width="960" height="504" loading="lazy" decoding="async" alt="coldframe: render Remotion videos in the cloud"></div>
+        </div>
       </li>
     </ol>
   </section>
@@ -201,11 +193,11 @@
 
 <div class="sky" data-sky aria-hidden="true"></div>
 
-<script src="assets/birds.js?v=7" defer></script>
+<script src="assets/birds.js?v=13" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.3.11/dist/lenis.min.js" defer></script>
-<script src="assets/site.js?v=7" defer></script>
+<script src="assets/site.js?v=13" defer></script>
 </body>
 </html>
