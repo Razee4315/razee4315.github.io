@@ -1,0 +1,22 @@
+name: IndexNow
+on:
+  schedule:
+    - cron: '17 6 * * 1'   # Mondays: pages whose lastmod changed in the last 8 days
+  workflow_dispatch:
+    inputs:
+      all:
+        description: 'Submit every URL in every sitemap (not only recent changes)'
+        type: boolean
+        default: false
+permissions:
+  contents: read
+jobs:
+  submit:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Submit to IndexNow
+        run: python tools/indexnow.py ${{ inputs.all && '--all' || '--days 8' }}
