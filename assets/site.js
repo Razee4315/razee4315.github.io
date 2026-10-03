@@ -92,7 +92,7 @@
       a.addEventListener('click', function (e) {
         var id = a.getAttribute('href'), target = id.length > 1 && document.getElementById(id.slice(1));
         if (!target) return;
-        e.preventDefault(); lenis.scrollTo(target, { offset: -24, duration: 1.3 });
+        e.preventDefault(); lenis.scrollTo(target, { duration: 1.3 }); // bands are full pages: land flush with the top
         target.setAttribute('tabindex', '-1'); target.focus({ preventScroll: true });
       });
     });
@@ -100,15 +100,22 @@
 
   var mm = gsap.matchMedia();
   mm.add('(prefers-reduced-motion: no-preference)', function () {
-    gsap.set('.band-copy, .band-shot', { autoAlpha: 0, y: 40 });
-    ScrollTrigger.batch('.band-copy, .band-shot', { start: 'top 88%', once: true, onEnter: function (els) { gsap.to(els, { autoAlpha: 1, y: 0, stagger: .12, duration: 1, overwrite: true }); } });
+    // Row reveal (docs/05 #1): the pieces of a band rise in turn once the band owns most of the screen.
+    // Opacity only, never visibility: the links stay reachable by keyboard, and focus reveals the band at once.
+    gsap.set('[data-reveal]', { opacity: 0, y: 40 });
+    $$('.band').forEach(function (band) {
+      var shown = false;
+      function show() { if (shown) return; shown = true; gsap.to($$('[data-reveal]', band), { opacity: 1, y: 0, stagger: .08, overwrite: true }); }
+      ScrollTrigger.create({ trigger: band, start: 'top 62%', once: true, onEnter: show });
+      band.addEventListener('focusin', show);
+    });
 
     document.fonts.ready.then(function () {
       var h1 = $('[data-split]');
       h1.setAttribute('aria-label', h1.textContent.replace(/\s+/g, ' ').trim());
       var split = SplitText.create(h1, { type: 'lines', mask: 'lines', autoSplit: true, onSplit: function (self) { self.lines.forEach(function (l) { l.setAttribute('aria-hidden', 'true'); }); } });
       gsap.timeline()
-        .fromTo('.nav', { autoAlpha: 0 }, { autoAlpha: 1, duration: .8, ease: 'power2.out' }, 0)
+        .fromTo('.nav', { autoAlpha: 0 }, { autoAlpha: 1, duration: .8 }, 0)
         .fromTo('.eyebrow', { autoAlpha: 0, y: 8 }, { autoAlpha: 1, y: 0, duration: .8 }, .05)
         .from(split.lines, { yPercent: 110, duration: 1, stagger: .1 }, .1)
         .fromTo('.lede', { autoAlpha: 0, y: 16 }, { autoAlpha: 1, y: 0 }, .4)
@@ -118,6 +125,12 @@
       return function () { split.revert(); };
     });
   });
-  mm.add('(prefers-reduced-motion: reduce)', function () { gsap.set('[data-hero-fade], .band-copy, .band-shot', { autoAlpha: 1, y: 0 }); });
+  // Scroll-linked transform (docs/05 #8): the mounted plate drifts a little slower than its page.
+  mm.add('(prefers-reduced-motion: no-preference) and (min-width: 961px)', function () {
+    $$('.band').forEach(function (band) {
+      gsap.fromTo($('.plate', band), { y: 28 }, { y: -28, ease: 'none', scrollTrigger: { trigger: band, start: 'top bottom', end: 'bottom top', scrub: 1 } });
+    });
+  });
+  mm.add('(prefers-reduced-motion: reduce)', function () { gsap.set('[data-hero-fade], [data-reveal]', { autoAlpha: 1, y: 0 }); });
   window.addEventListener('load', function () { ScrollTrigger.refresh(); });
 })();

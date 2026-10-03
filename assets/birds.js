@@ -319,12 +319,12 @@
     { name: 'Apricot',  body: '#FFB25B', belly: '#FFE2BD', dark: '#0C1F1B', tail: '#0C1F1B', beak: '#2E2620', eye: '#0C1F1B', legs: '#2E2620', accent: '#E07A1F', crest: 'tuft', crestColor: '#0C1F1B', cheek: '#F2856B', size: .95, pitch: 3400 },
     { name: 'Cobalt',   body: '#8FD9EF', belly: '#E7F8FC', dark: '#1D5FD0', tail: '#1FA0DC', beak: '#FFB25B', eye: '#0E2A6B', legs: '#0E2A6B', accent: '#1F4FD6', crest: 'plume', crestColor: '#1D5FD0', stripes: '#7FD6EE', size: 1.05, pitch: 2650 },
     { name: 'Recorder', body: '#F2F0EB', belly: '#FFFFFF', dark: '#0E0E0E', tail: '#0E0E0E', beak: '#E5484D', eye: '#0E0E0E', legs: '#0E0E0E', accent: '#D2452F', crest: 'dot', crestColor: '#E5484D', size: .97, pitch: 3250 },
-    { name: 'Marker',   body: '#FFF1D6', belly: '#FFFFFF', dark: '#00A9C4', tail: '#FF8C00', beak: '#FF8C00', eye: '#1F3A2F', legs: '#1F3A2F', accent: '#E07A00', crest: 'tuft', crestColor: '#FF8C00', stripes: '#8BE7F2', size: .92, pitch: 3700 },
+    { name: 'Marker',   body: '#FFF1D6', belly: '#FFFFFF', dark: '#00A9C4', tail: '#FF8C00', beak: '#FF8C00', eye: '#1F3A2F', legs: '#1F3A2F', accent: '#E07A00', crest: 'tuft', crestColor: '#FF8C00', stripes: '#8BE7F2', letter: '#008DA6', size: .92, pitch: 3700 },
     { name: 'Moss',     body: '#C7D3A4', belly: '#EEF2DD', dark: '#3F5A45', tail: '#3F5A45', beak: '#D86C48', eye: '#2A3A2C', legs: '#4A3F35', accent: '#5E7A42', cheek: '#F2B8A2', size: 1.1, pitch: 2400 },
     { name: 'Ink',      body: '#2B2A27', belly: '#EEEBE3', dark: '#141414', tail: '#141414', beak: '#FFB25B', eye: '#141414', eyeRing: '#EEEBE3', legs: '#141414', accent: '#141414', size: 1.02, pitch: 2050 },
     { name: 'Blossom',  body: '#F4BFAA', belly: '#FCE7DD', dark: '#A5594A', tail: '#A5594A', beak: '#4A3F35', eye: '#3B2622', legs: '#4A3F35', accent: '#C2574A', crest: 'plume', crestColor: '#A5594A', cheek: '#E77F6A', size: .96, pitch: 3500 },
     { name: 'Goldie',   body: '#F3C94C', belly: '#FBECB2', dark: '#6B4E16', tail: '#6B4E16', beak: '#E26D3D', eye: '#3A2A0B', legs: '#6B4E16', accent: '#B8861A', crest: 'tuft', crestColor: '#6B4E16', stripes: '#F9DD86', size: 1, pitch: 3100 },
-    { name: 'Chick',    body: '#FBE7A1', belly: '#FFF7D9', dark: '#EBBF4E', tail: '#EBBF4E', beak: '#EC8A5A', eye: '#3A2A0B', legs: '#EC8A5A', accent: '#D99A1E', crest: 'sprout', crestColor: '#3F5A45', cheek: '#F4A98E', round: true, size: .78, pitch: 4300 }
+    { name: 'Chick',    body: '#FBE7A1', belly: '#FFF7D9', dark: '#EBBF4E', tail: '#EBBF4E', beak: '#EC8A5A', eye: '#3A2A0B', legs: '#EC8A5A', accent: '#D99A1E', crest: 'sprout', crestColor: '#3F5A45', cheek: '#F4A98E', letter: '#A87A12', round: true, size: .78, pitch: 4300 }
   ];
 
   function birdSVG(st) {
@@ -354,6 +354,7 @@
   var SYM = {
     note: function (g, c) { el('path', { d: 'M10 17.2a3.2 3.2 0 1 1-1.8-2.9V4.5l9.6-2.2v11.9a3.2 3.2 0 1 1-1.8-2.9V6.9L10 8.3z', fill: c }, g); },
     heart: function (g, c) { el('path', { d: 'M12 21s-7.5-4.6-9.6-9.2C.8 8 3 4.5 6.6 4.5c2.2 0 3.8 1.2 5.4 3.2 1.6-2 3.2-3.2 5.4-3.2 3.6 0 5.8 3.5 4.2 7.3C19.5 16.4 12 21 12 21z', fill: c }, g); },
+    quaver: function (g, c) { el('path', { d: 'M11.4 18.6a3.4 3.4 0 1 1-2-3.1V2.6c4.9 1 7.9 3.7 7.9 8.3-1.6-2.2-3.5-3.3-5.9-3.6z', fill: c }, g); },
     star: function (g, c) { el('polygon', { points: '12,2 14.9,8.6 22,9.3 16.6,14 18.2,21 12,17.3 5.8,21 7.4,14 2,9.3 9.1,8.6', fill: c }, g); },
     sparkle: function (g, c) { el('path', { d: 'M12 1.5 13.9 10.1 22.5 12 13.9 13.9 12 22.5 10.1 13.9 1.5 12 10.1 10.1z', fill: c }, g); },
     sun: function (g, c) { el('circle', { cx: 12, cy: 12, r: 4.6, fill: c }, g); var d = ''; for (var i = 0; i < 8; i++) { var a = i * Math.PI / 4; d += 'M' + f1(12 + Math.cos(a) * 7.4) + ' ' + f1(12 + Math.sin(a) * 7.4) + 'L' + f1(12 + Math.cos(a) * 10.6) + ' ' + f1(12 + Math.sin(a) * 10.6); } el('path', { d: d, stroke: c, 'stroke-width': 2.2, 'stroke-linecap': 'round' }, g); },
@@ -383,7 +384,8 @@
       function owner(n) { var i = Number(n.dataset.nest); return i === 6 ? 7 : i === 7 ? 6 : i; }
       return owner(a) - owner(b);
     }), homes = [], homeClock = 0;
-    nests.forEach(function (nest, i) { nest.parentNode.style.setProperty('--bird-color', STYLES[i].dark); });
+    // Roost letters take the bird's dark colour; two pale birds carry a deeper one so every letter clears 3:1.
+    nests.forEach(function (nest, i) { nest.parentNode.style.setProperty('--bird-color', STYLES[i].letter || STYLES[i].dark); });
     function occupancy(b, on) {
       var nest = nests[birds.indexOf(b)];
       if (nest) nest.parentNode.classList.toggle('occupied', on);
@@ -557,7 +559,8 @@
     function notes(b) {
       var p = beakAt(b);
       for (var i = 0; i < 3; i++) (function (i) {
-        var n = document.createElement('span'); n.className = 'note'; n.textContent = i % 2 ? '♫' : '♪'; n.style.color = b.style.accent; sky.appendChild(n);
+        var n = document.createElement('span'); n.className = 'note'; sky.appendChild(n);
+        var ns = el('svg', { viewBox: '0 0 24 24' }, n); (i % 2 ? SYM.note : SYM.quaver)(ns, b.style.accent);
         var dx = Math.sign(b.faceS || 1) * rand(10, 24);
         n.animate([{ transform: 'translate(' + p.x + 'px,' + p.y + 'px) scale(.6)', opacity: 0 }, { transform: 'translate(' + (p.x + dx * .4) + 'px,' + (p.y - 12) + 'px) scale(1)', opacity: 1, offset: .25 }, { transform: 'translate(' + (p.x + dx) + 'px,' + (p.y - 34) + 'px) scale(.9)', opacity: 0 }],
           { duration: 1300, delay: i * 240, easing: 'cubic-bezier(.3,.6,.4,1)', fill: 'both' }).onfinish = function () { n.remove(); };

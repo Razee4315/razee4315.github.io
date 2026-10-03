@@ -1,5 +1,6 @@
 # 02 Art direction: "Catalog, with a wren tree"
 
+> Updated 2026-10-03: the catalogue is five full-page spreads with mounted plates (ADR-36, ADR-37) and the meadow animals keep their distance (ADR-38, ADR-39). Type is Instrument Serif, Bricolage Grotesque and JetBrains Mono (ADR-16, ADR-21); current tokens are in 03.
 > Updated 2026-09-28 after owner review: the birds now fly across the whole page (ADR-11), the catalogue is full-bleed brand-colour rows (ADR-12), logos are animated characters (ADR-13), see 13-decision-log.md. Where this file and the log differ, the log wins.
 
 Approved at Stop Gate 1 (Catalog, Crafted tier), then extended by the owner on 2026-09-28: the Paperwren bird becomes a living tree scene where visitors invite up to 10 birds that talk to each other. Re-specified here as one direction.
