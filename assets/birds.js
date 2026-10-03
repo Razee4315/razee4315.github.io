@@ -210,17 +210,22 @@
     if ('IntersectionObserver' in window) {
       new IntersectionObserver(function (entries) { sceneActive(entries[0].isIntersecting); }).observe(svg);
     } else sceneActive(true);
-    // Reuse a bounded set of leaves for click showers. No nodes are added per click.
-    var shower = [];
-    for (var si = 0; si < 12; si++) {
+    // Reuse idle leaves, growing only when showers overlap. Never interrupt a fall.
+    var shower = [], showerSize = 12, maxShowerLeaves = 96;
+    function makeShowerLeaf() {
       var origin = el('g', { 'data-leaf-burst': '' }, world), fall = el('g', { opacity: 0 }, origin);
       var shape = el('path', { d: 'M0 0C8 -9 24 -10 36 0C24 10 8 9 0 0Z' }, fall);
-      shower.push({ origin: origin, fall: fall, shape: shape, animation: null });
+      var part = { origin: origin, fall: fall, shape: shape, animation: null };
+      shower.push(part);
+      return part;
     }
+    for (var si = 0; si < showerSize; si++) makeShowerLeaf();
     function shakeLeaves() {
       if (reduce) return;
-      shower.forEach(function (part, i) {
-        if (part.animation) part.animation.cancel();
+      var available = shower.filter(function (part) { return !part.animation; }).slice(0, showerSize);
+      while (available.length < showerSize && shower.length < maxShowerLeaves) available.push(makeShowerLeaf());
+      // At the cap, let the existing shower finish instead of recycling active leaves.
+      available.forEach(function (part, i) {
         var source = leafSources[Math.floor(rng() * leafSources.length)], drop = 920 - source.y, drift = (rng() - .5) * 180;
         part.origin.setAttribute('transform', 'translate(' + f1(source.x) + ' ' + f1(source.y) + ')');
         part.shape.setAttribute('fill', source.color);
@@ -232,6 +237,7 @@
           { opacity: .9, transform: 'translate(' + f1(-drift * .4) + 'px,' + f1(drop * .65) + 'px) rotate(-35deg)', offset: .68 },
           { opacity: 0, transform: 'translate(' + f1(drift * .6) + 'px,' + f1(drop) + 'px) rotate(150deg)' }
         ], { duration: 3500 + rng() * 1600, delay: i * 55, easing: 'linear' });
+        part.animation.onfinish = function () { part.animation = null; };
       });
     }
     svg.addEventListener('click', shakeLeaves);

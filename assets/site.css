@@ -153,7 +153,7 @@ h1, h2, h3, p { margin: 0; }
 .band-shot { grid-column: 6 / 13; margin: 0; }
 .band:nth-child(even) .band-copy { grid-column: 9 / 13; }
 .band:nth-child(even) .band-shot { grid-column: 1 / 8; }
-/* Lockup: the tile is as tall as the capitals and stands on the name's baseline. */
+/* Unboxed marks: optically cropped SVGs share the capitals' height and baseline. */
 .band-title { display: flex; align-items: baseline; gap: .26em; font-size: var(--s-name); white-space: nowrap; }
 .logo { flex: none; }
 .logo svg { width: .72em; height: .72em; }

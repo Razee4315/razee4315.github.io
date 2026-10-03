@@ -23,7 +23,7 @@ Mirrored as custom properties in `assets/site.css` `:root`. No value may appear 
 | --pad-x | 32px (16px under 700px) | |
 | --max / --gutter | 1440px / 24px | 12 columns; nav, hero, bands and footer all sit on this grid |
 | --nav-clear | 88px | top padding of every full-page section, so its first row clears the floating nav |
-| radius | 0 | everywhere, including project logo tiles. Speech bubbles and scene drawings are the only rounded things |
+| radius | 0 | everywhere in the interface. Speech bubbles and scene drawings are the only rounded things |
 | --ease-out | cubic-bezier(0.16, 1, 0.3, 1) | default (GSAP expo.out) |
 | --dur-ui / --dur-wipe | 240ms / 320ms | hover and press / underline wipe. Reveals run 0.9s in GSAP |
 
@@ -41,7 +41,7 @@ Set inline on each band as `--bg`, `--fg`, `--hi`. A band uses exactly two colou
 
 - `--fg` on `--bg`: all copy, the header and footer rules (`--fg` at 26%).
 - `--bg` on `--fg` (the inverse pair): the Visit button and the plate that mounts the share image. Because the plate is always the band's opposite colour, a share image never sits directly on a band of its own colour.
-- `--hi`: only the 8px square beside the catalogue code.
+- `--hi`: the 8px square beside the catalogue code. Logo marks are unboxed and use the band foreground, with retained brand details: the wren wing/belly/beak, Vuoom red dot, and coldframe pale-blue frames (#B8E9F6, #7FD6EE).
 - Mono labels in a band are dimmed to 92% at most, which keeps every band at or above 4.5:1.
 
 ## Scene colours (drawing only, in `assets/birds.js`)

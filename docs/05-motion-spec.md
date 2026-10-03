@@ -18,7 +18,7 @@ Crafted tier: floor of 9, of which 8 are present. Item 7 (pinned scrub) was remo
 
 ## Signature details
 
-- Tree: drawn once. It moves only when a bird lands or leaves (the limb dips and settles, 1.1s) or a gust passes (every 9 to 15s, limbs swing ±0.6° in sequence). Five canopy leaves fall on a slow CSS loop. A click or Enter on the tree releases one bird and a twelve-leaf shower from a reused pool.
+- Tree: drawn once. It moves only when a bird lands or leaves (the limb dips and settles, 1.1s) or a gust passes (every 9 to 15s, limbs swing ±0.6° in sequence). Five canopy leaves fall on a slow CSS loop. A click, Enter or Space on the tree releases one bird and a twelve-leaf shower. Overlapping showers reuse only idle leaves, growing the pool from twelve up to 96 leaves as needed. At capacity, further activations use any free leaves and let all active falls finish; completed leaves become reusable. Reduced motion disables the shower.
 - Flock (assets/birds.js): up to ten birds on a page-wide layer, one rAF loop, transforms only. A click anywhere pops a bird out; it hops, bows and flies an arc-length-sampled curve with flap bursts and tucked glides to a letter, a button edge, the top of a plate, the tree or its nest. Perched birds turn, flick the tail, bow, hop along an edge, blink, and flee a cursor within 70px. Every 3.5 to 6.5s two neighbours face each other and trade drawn symbols in bubbles; a lone bird sings drawn notes. Every fourth song gets the Snipflag bracket snap. Birds are silent on the hub (ADR-23).
 - Roost: each bird flies to its own nest when the footer is on screen; its letter appears on landing.
 - Meadow (assets/meadow.js): one rAF loop for the rabbit and the two chicks, paused off-screen, in hidden tabs and for reduced motion.

@@ -15,7 +15,7 @@ Seven full pages on desktop: the hero, five project spreads and the roost. Every
    - Scene: the tree (click or Enter: one bird plus a leaf shower), a rabbit left of the trunk, a black and a yellow chick right of it, full-width grass on dark soil.
 2. **Catalogue** (#catalogue): five bands, one full page each, in the project's own colours (docs/03). The soil under the grass is the first band's colour, so the tree stands on the catalogue. Each band is a spread:
    - Header row with a hairline under it: accent square, code, kind, and "01/05" at the right.
-   - Copy (4 columns): the lockup (a square logo tile as tall as the capitals, on the name's baseline), one description, the Visit button.
+   - Copy (4 columns): the lockup (an unboxed logo mark optically cropped to the capitals' height, on the name's baseline), one description, the Visit button.
    - Plate (7 columns): the share image mounted in the band's text colour with a caption strip (the site address and an out-arrow). The plate links to the project (not a tab stop; the name and Visit are).
    - Footer row with a hairline over it: platforms and licence at the left, "Next · [project]" at the right (the last one goes to the roost).
    - Copy and plate swap sides on even bands. 960px and under: one column, plate under the copy, still at least one screen tall.
@@ -24,7 +24,7 @@ Seven full pages on desktop: the hero, five project spreads and the roost. Every
    - PW-03 Paperwren: "Open PDF, Word, Excel and PowerPoint in a blink. No account, no ads, no internet access, no permissions." · "Android · Windows · MIT"
    - VM-04 Vuoom: "Record polished demos with automatic zoom, quick edits, offline captions and GIF or MP4 export. No watermark." · "Windows · Apache-2.0"
    - CF-05 coldframe: "Render Remotion videos on free GitHub machines instead of your laptop. One setup command, parallel renders, every frame checked." · "GitHub Actions · MIT"
-3. **The evening roost** (#roost, footer, one full page): "The evening roost" / "A place to land." / "Ten little nests. A hello from every bird that comes home." Ten nests in two rows of five spell HELLO RAZEE as birds land. A status line, an Invite button, then on the page grid: name and "Small tools. Built in public.", GitHub, LinkedIn, Back to the tree.
+3. **The evening roost** (#roost, footer, one full page): "The evening roost" / "A place to land." / "Ten little nests. A little hello for you." Ten nests in two rows of five spell HELLO THERE as birds land. A status line, an Invite button, then on the page grid: name and "Small tools. Built in public.", GitHub, LinkedIn, Back to the tree.
 
 ## /404.html
 Same paper, ink, stone and typefaces (Instrument Serif headline, Bricolage text, mono labels); one bird on a twig with a "?" bubble; links to all five; the case-fixing redirect stays.
@@ -38,7 +38,7 @@ No JS or CDN failure: everything visible and static (boot safety net at 2.5s). I
 - Visit button (in a band): --fg background, --bg text, a drawn arrow that nudges on hover.
 - Plate: --fg mount, 10px (8px on small screens), caption strip 40px with the address in lowercase mono and an out-arrow in --bg.
 - Arrows: one drawn SVG family (2px round stroke) for every arrow on the page. No font glyphs for arrows or music notes.
-- Logo tile: square, the brand mark on a tile that contrasts with the band (light tiles on dark bands, the dark tile on orange).
+- Logo mark: transparent SVG directly on the band, with a contrasting foreground and selected brand details. Tightly cropped square viewBoxes keep all five marks consistent without background tiles.
 - Bird rig: tail, body, belly, folded wing, flight wings (near and far), crest, beak, eye, legs.
 - Chick rig: shadow, two legs, tail, body, belly, wing, head (tuft, cheek, eye, two-part beak), heart.
 - Bubble: card-coloured shape, 2.5px ink stroke, tail toward the beak; symbol drawn in the speaker's accent.
