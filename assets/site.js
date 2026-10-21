@@ -72,7 +72,7 @@
         navLinks.forEach(function (a) { a.setAttribute('aria-current', a.getAttribute('href') === '#' + e.target.id ? 'true' : 'false'); });
       });
     }, { rootMargin: '-45% 0px -50% 0px' });
-    $$('.band').forEach(function (b) { bandIO.observe(b); });
+    $$('.band, .shelf').forEach(function (b) { bandIO.observe(b); });
     new IntersectionObserver(function (e) { if (e[0].isIntersecting) navLinks.forEach(function (a) { a.setAttribute('aria-current', 'false'); }); }, { rootMargin: '-45% 0px -50% 0px' }).observe($('.hero'));
   }
 
@@ -103,7 +103,7 @@
     // Row reveal (docs/05 #1): the pieces of a band rise in turn once the band owns most of the screen.
     // Opacity only, never visibility: the links stay reachable by keyboard, and focus reveals the band at once.
     gsap.set('[data-reveal]', { opacity: 0, y: 40 });
-    $$('.band').forEach(function (band) {
+    $$('.band, .shelf-block').forEach(function (band) {
       var shown = false;
       function show() { if (shown) return; shown = true; gsap.to($$('[data-reveal]', band), { opacity: 1, y: 0, stagger: .08, overwrite: true }); }
       ScrollTrigger.create({ trigger: band, start: 'top 62%', once: true, onEnter: show });

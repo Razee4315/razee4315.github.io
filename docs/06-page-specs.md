@@ -17,14 +17,15 @@ Seven full pages on desktop: the hero, five project spreads and the roost. Every
    - Header row with a hairline under it: accent square, code, kind, and "01/05" at the right.
    - Copy (4 columns): the lockup (an unboxed logo mark optically cropped to the capitals' height, on the name's baseline), one description, the Visit button.
    - Plate (7 columns): the share image mounted in the band's text colour with a caption strip (the site address and an out-arrow). The plate links to the project (not a tab stop; the name and Visit are).
-   - Footer row with a hairline over it: platforms and licence at the left, "Next · [project]" at the right (the last one goes to the roost).
+   - Footer row with a hairline over it: platforms and licence at the left, "Next · [project]" at the right (the last one goes to the shelf).
    - Copy and plate swap sides on even bands. 960px and under: one column, plate under the copy, still at least one screen tall.
    - SF-01 Snipflag: "Turn screenshots into Linear issues. Snip anything on screen, mark it up, pixelate private bits, and send it straight to Linear." · "Windows · macOS · Linux · MIT"
    - PL-02 Paperling: "A calm Markdown editor with live preview, math, diagrams and optional AI. Open a file and start writing." · "Desktop · Android · Apache-2.0"
    - PW-03 Paperwren: "Open PDF, Word, Excel and PowerPoint in a blink. No account, no ads, no internet access, no permissions." · "Android · Windows · MIT"
    - VM-04 Vuoom: "Record polished demos with automatic zoom, quick edits, offline captions and GIF or MP4 export. No watermark." · "Windows · Apache-2.0"
    - CF-05 coldframe: "Render Remotion videos on free GitHub machines instead of your laptop. One setup command, parallel renders, every frame checked." · "GitHub Actions · MIT"
-3. **The evening roost** (#roost, footer, one full page): "The evening roost" / "A place to land." / "Ten little nests. A little hello for you." Ten nests in two rows of five spell HELLO THERE as birds land. A status line, an Invite button, then on the page grid: name and "Small tools. Built in public.", GitHub, LinkedIn, Back to the tree.
+3. **The shelf** (#all, on paper): "Everything · N projects" / "The whole shelf." / "Every public thing I have made, sorted by kind." Every public project, featured five included, as one list grouped by kind (Desktop apps, Android apps, Developer and AI tools, Web tools, Websites, Games and toys, Learning tools). Group label in columns 1-3 over an ink rule; rows in 4-12, each name, one short line, platforms, out-arrow, on a hairline. No images, no cards. 960px and under: label above its list. Groups rise in with the row reveal. Nav link: "All projects".
+4. **The evening roost** (#roost, footer, one full page): "The evening roost" / "A place to land." / "Ten little nests. A little hello for you." Ten nests in two rows of five spell HELLO THERE as birds land. A status line, an Invite button, then on the page grid: name and "Small tools. Built in public.", GitHub, LinkedIn, Back to the tree.
 
 ## /404.html
 Same paper, ink, stone and typefaces (Instrument Serif headline, Bricolage text, mono labels); one bird on a twig with a "?" bubble; links to all five; the case-fixing redirect stays.

@@ -173,6 +173,36 @@ h1, h2, h3, p { margin: 0; }
 .next::after, .foot-links a::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1.5px; background: currentColor; transform: scaleX(0); transform-origin: right; transition: transform var(--dur-wipe) var(--ease-out); }
 .next:hover::after, .next:focus-visible::after, .foot-links a:hover::after, .foot-links a:focus-visible::after { transform: scaleX(1); transform-origin: left; }
 
+/* ---------- The shelf: every project as one quiet list, grouped by kind ----------
+   Rows sit on hairlines like the band rules; no cards. */
+.shelf { background: var(--paper); }
+.shelf-inner { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); max-width: calc(var(--max) + 2 * var(--pad-x)); margin: 0 auto; padding: var(--nav-clear) var(--pad-x) clamp(64px, 10vh, 120px); }
+.shelf-head { grid-column: 1 / -1; padding-bottom: clamp(40px, 7vh, 80px); }
+.shelf-head h2 { margin: 12px 0 14px; font: 400 clamp(42px, 5vw, 72px)/1 var(--serif); letter-spacing: -.01em; }
+.shelf-lede { max-width: 30rem; color: var(--stone); font-size: var(--s-lede); }
+.shelf-group { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); align-items: start; }
+.shelf-group h3 { grid-column: 1 / 4; display: flex; justify-content: space-between; gap: 12px; padding: 16px 0; border-top: 1.5px solid var(--ink); }
+.shelf-group h3 span { color: var(--stone); }
+.shelf-list { grid-column: 4 / -1; list-style: none; margin: 0 0 clamp(32px, 5vh, 56px); padding: 0; border-top: 1.5px solid var(--ink); }
+.shelf-list a { display: grid; grid-template-columns: minmax(0, 15rem) minmax(0, 1fr) auto 16px; align-items: baseline; gap: 6px 24px; padding: 14px 0; border-bottom: 1px solid var(--rule); }
+.s-name { font-weight: 700; font-size: 18px; letter-spacing: -.01em; transition: color var(--dur-ui) var(--ease-out); }
+.s-what { color: var(--stone); }
+.s-spec { color: var(--stone); white-space: nowrap; }
+.shelf-list .ico { align-self: center; }
+.shelf-list a:hover .s-name { color: var(--teal); }
+.shelf-list a:hover .ico { transform: translate(2px, -2px); }
+@media (max-width: 960px) {
+  .shelf-group h3, .shelf-list { grid-column: 1 / -1; }
+  .shelf-group h3 { border-bottom: 1px solid var(--rule); }
+  .shelf-list { border-top: 0; }
+}
+@media (max-width: 600px) {
+  .shelf-list a { grid-template-columns: minmax(0, 1fr) 16px; gap: 2px 12px; }
+  .s-what { grid-column: 1; grid-row: 2; }
+  .s-spec { grid-column: 1; grid-row: 3; margin-top: 4px; }
+  .shelf-list .ico { grid-column: 2; grid-row: 1; }
+}
+
 /* ---------- The evening roost ---------- */
 .foot { --stone: #5C5A52; background: var(--roost); }
 .foot-inner { display: flex; flex-direction: column; justify-content: space-between; gap: 28px; min-height: 100svh; max-width: calc(var(--max) + 2 * var(--pad-x)); margin: 0 auto; padding: var(--nav-clear) var(--pad-x) 28px; }
