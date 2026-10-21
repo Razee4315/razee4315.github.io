@@ -180,6 +180,8 @@ h1, h2, h3, p { margin: 0; }
 .shelf-head { grid-column: 1 / -1; padding-bottom: clamp(40px, 7vh, 80px); }
 .shelf-head h2 { margin: 12px 0 14px; font: 400 clamp(42px, 5vw, 72px)/1 var(--serif); letter-spacing: -.01em; }
 .shelf-lede { max-width: 30rem; color: var(--stone); font-size: var(--s-lede); }
+.shelf-lede a { color: var(--ink); box-shadow: inset 0 -1.5px 0 currentColor; transition: color var(--dur-ui) var(--ease-out); }
+.shelf-lede a:hover { color: var(--teal); }
 .shelf-group { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); align-items: start; }
 .shelf-group h3 { grid-column: 1 / 4; display: flex; justify-content: space-between; gap: 12px; padding: 16px 0; border-top: 1.5px solid var(--ink); }
 .shelf-group h3 span { color: var(--stone); }
